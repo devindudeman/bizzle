@@ -2217,6 +2217,12 @@
             };
             gameState.guesses.push(fakeGuess);
             
+            // Reveal the first hint (neighborhood) and hide header like a normal wrong guess
+            if (gameState.hintsRevealed === 0) {
+                revealHint(1);
+                gameState.hintsRevealed = 1;
+            }
+            
             // Transition to multiple choice phase
             transitionToMultipleChoice();
             
