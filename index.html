@@ -22,30 +22,38 @@
         }
 
         .container {
-            max-width: 500px;
+            max-width: 520px;
             width: 100%;
             margin: 0 auto;
-            padding: 16px;
+            padding: 20px;
             flex: 1;
         }
 
         header {
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid #E5E5E5;
-            margin-bottom: 20px;
+            padding: 24px 0;
+            background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #E2E8F0;
         }
 
         h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #3B82F6;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
         }
 
         .tagline {
-            font-size: 14px;
-            color: #666;
-            margin-top: 5px;
+            font-size: 16px;
+            color: #64748B;
+            font-weight: 500;
+            margin-top: 8px;
         }
 
         .stats-button {
@@ -59,20 +67,43 @@
             padding: 8px;
         }
 
+        .debug-button {
+            position: absolute;
+            top: 20px;
+            right: 70px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            opacity: 0.6;
+        }
+
+        .debug-button:hover {
+            opacity: 1;
+        }
+
         .game-number {
             font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+            color: #64748B;
+            margin-top: 12px;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
         }
 
         .photo-container {
             width: 100%;
             max-height: 300px;
             overflow: hidden;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
             background: #E5E5E5;
             position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border: 3px solid white;
         }
 
         .photo-container img {
@@ -90,31 +121,69 @@
         }
 
         .fun-fact {
-            background: #F3F4F6;
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border: 1px solid #F59E0B;
             padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            line-height: 1.5;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
         }
 
-        .fun-fact-label {
-            font-weight: 600;
-            color: #3B82F6;
+        .clue-label {
+            font-weight: 700;
+            color: #92400E;
             margin-bottom: 8px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .hints-section {
-            margin-bottom: 20px;
+        .new-hints {
+            margin-bottom: 24px;
+        }
+
+        .new-hints .hint {
+            margin-bottom: 16px;
+        }
+
+        .new-hints .hint:first-child {
+            border: 3px solid #3B82F6;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+            transform: scale(1.02);
         }
 
         .hint {
-            background: #FEF3C7;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            display: none;
-            animation: slideIn 0.3s ease-out;
+            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+            border: 2px solid #3B82F6;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: block;
+            animation: slideInFromTop 0.5s ease-out;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .hint.revealed {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.5s ease-out;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hint.revealed {
@@ -122,11 +191,12 @@
         }
 
         .hint-label {
-            font-weight: 600;
-            color: #92400E;
-            font-size: 12px;
+            font-weight: 700;
+            color: #1E40AF;
+            font-size: 14px;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
+            letter-spacing: 0.75px;
         }
 
         @keyframes slideIn {
@@ -141,8 +211,67 @@
         }
 
         .guess-section {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             position: relative;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #E5E7EB;
+        }
+
+        .guess-counter {
+            text-align: center;
+            margin-bottom: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #64748B;
+            background: #F1F5F9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .guess-counter.warning {
+            color: #D97706;
+            background: #FEF3C7;
+        }
+
+        .guess-counter.danger {
+            color: #DC2626;
+            background: #FEE2E2;
+        }
+
+        .give-up-container {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .give-up-button {
+            background: #6B7280;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .give-up-button:hover:not(:disabled) {
+            background: #4B5563;
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        .give-up-button:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            opacity: 0.5;
         }
 
         .guess-input-container {
@@ -151,17 +280,22 @@
 
         .guess-input {
             width: 100%;
-            height: 48px;
-            padding: 0 48px 0 16px;
-            font-size: 16px;
-            border: 2px solid #E5E5E5;
-            border-radius: 8px;
-            transition: border-color 0.2s;
+            height: 56px;
+            padding: 0 60px 0 20px;
+            font-size: 18px;
+            font-weight: 500;
+            border: 3px solid #E5E7EB;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: #FAFBFC;
         }
 
         .guess-input:focus {
             outline: none;
             border-color: #3B82F6;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
         }
 
         .guess-input:disabled {
@@ -171,25 +305,28 @@
 
         .submit-button {
             position: absolute;
-            right: 4px;
+            right: 6px;
             top: 50%;
             transform: translateY(-50%);
-            background: #3B82F6;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 6px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         .submit-button:hover:not(:disabled) {
-            background: #2563EB;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
 
         .submit-button:disabled {
@@ -235,29 +372,56 @@
         .guesses-grid {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #F8FAFC;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            position: relative;
+        }
+
+        .guesses-grid::before {
+            content: "Your Guesses";
+            position: absolute;
+            top: -12px;
+            left: 16px;
+            background: #F8FAFC;
+            padding: 0 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .guess-slot {
-            height: 48px;
-            background: #E5E5E5;
-            border-radius: 8px;
+            height: 52px;
+            background: white;
+            border: 2px dashed #CBD5E1;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             padding: 0 16px;
-            font-weight: 500;
-            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            color: #64748B;
         }
 
         .guess-slot.correct {
-            background: #22C55E;
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
             color: white;
+            border: 2px solid #16A34A;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+            transform: scale(1.02);
         }
 
         .guess-slot.wrong {
-            background: #EF4444;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
             color: white;
+            border: 2px solid #DC2626;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
 
         .game-end {
@@ -430,6 +594,59 @@
             margin-top: 4px;
         }
 
+        .debug-options {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .debug-section {
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: 16px;
+        }
+
+        .debug-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .debug-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+
+        .debug-section p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #6B7280;
+        }
+
+        .debug-btn {
+            background: #6B7280;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 4px 8px 4px 0;
+            transition: background 0.2s;
+        }
+
+        .debug-btn:hover {
+            background: #4B5563;
+        }
+
+        .debug-btn.danger {
+            background: #DC2626;
+        }
+
+        .debug-btn.danger:hover {
+            background: #B91C1C;
+        }
+
         .error-message {
             background: #FEE2E2;
             color: #991B1B;
@@ -446,16 +663,56 @@
 
         @media (max-width: 480px) {
             .container {
-                padding: 12px;
+                padding: 16px;
             }
 
             h1 {
-                font-size: 28px;
+                font-size: 32px;
             }
 
             .stats-button {
-                top: 16px;
-                right: 16px;
+                top: 20px;
+                right: 20px;
+            }
+
+            .debug-button {
+                top: 20px;
+                right: 70px;
+            }
+
+            .guess-section {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+
+            .guess-input {
+                height: 52px;
+                font-size: 16px;
+                padding: 0 56px 0 16px;
+            }
+
+            .submit-button {
+                width: 40px;
+                height: 40px;
+            }
+
+            .photo-container {
+                max-height: 250px;
+                margin-bottom: 20px;
+            }
+
+            .guesses-grid {
+                padding: 12px;
+            }
+
+            .guess-slot {
+                height: 48px;
+                font-size: 15px;
+            }
+
+            .give-up-button {
+                font-size: 12px;
+                padding: 6px 14px;
             }
         }
     </style>
@@ -464,6 +721,7 @@
     <div class="container">
         <header>
             <button class="stats-button" onclick="showStats()" aria-label="View Statistics">📊</button>
+            <button class="debug-button" onclick="showDebug()" aria-label="Debug Menu">🔧</button>
             <h1>🏪 Bizzle</h1>
             <p class="tagline">Guess the SF small business!</p>
             <p class="game-number" id="gameNumber"></p>
@@ -476,54 +734,26 @@
         </div>
 
         <div id="gameContent" style="display: none;">
-            <div class="photo-container">
-                <img id="businessPhoto" alt="Business interior photo">
-            </div>
-
-            <div class="fun-fact">
-                <div class="fun-fact-label">Fun Fact</div>
-                <div id="funFact"></div>
-            </div>
-
-            <div class="hints-section">
-                <div class="hint" id="hint1">
-                    <div class="hint-label">Neighborhood</div>
-                    <div id="neighborhood"></div>
+            <!-- Guess Section at Top -->
+            <div id="guessSection" class="guess-section">
+                <div class="guess-counter">
+                    <span id="guessCounter">5 guesses remaining</span>
                 </div>
-                <div class="hint" id="hint2">
-                    <div class="hint-label">Signature Item</div>
-                    <div id="signature"></div>
-                </div>
-                <div class="hint" id="hint3">
-                    <div class="hint-label">Category</div>
-                    <div id="category"></div>
-                </div>
-                <div class="hint" id="hint4">
-                    <div class="hint-label">Street</div>
-                    <div id="street"></div>
-                </div>
-            </div>
-
-            <div class="guess-section">
                 <div class="guess-input-container">
                     <input type="text" 
                            id="guessInput" 
                            class="guess-input" 
-                           placeholder="Enter your guess..."
+                           placeholder="What business is this?"
                            autocomplete="off">
-                    <button id="submitButton" class="submit-button" onclick="submitGuess()">→</button>
+                    <button id="submitButton" class="submit-button" onclick="submitGuess()" title="Submit guess">→</button>
                     <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+                </div>
+                <div class="give-up-container">
+                    <button id="giveUpButton" class="give-up-button" onclick="giveUp()" title="Reveal the answer">🏳️ I give up</button>
                 </div>
             </div>
 
-            <div class="guesses-grid" id="guessesGrid">
-                <div class="guess-slot"></div>
-                <div class="guess-slot"></div>
-                <div class="guess-slot"></div>
-                <div class="guess-slot"></div>
-                <div class="guess-slot"></div>
-            </div>
-
+            <!-- Game End Section (NEW CONTENT AT TOP) -->
             <div class="game-end" id="gameEnd">
                 <div class="result-message" id="resultMessage"></div>
                 <div class="business-name-reveal" id="businessNameReveal"></div>
@@ -533,6 +763,27 @@
                     <div class="countdown-label">Next Bizzle in</div>
                     <div class="countdown-time" id="countdownTime"></div>
                 </div>
+            </div>
+
+            <!-- Dynamic Hints Section (newest hints at top) -->
+            <div class="new-hints" id="newHints">
+                <!-- Hints will be dynamically prepended here, newest first -->
+            </div>
+
+            <!-- Photo Section (always visible baseline) -->
+            <div class="photo-container">
+                <img id="businessPhoto" alt="Business interior photo">
+            </div>
+
+            <!-- Fun Fact Section (always visible baseline) -->
+            <div class="fun-fact">
+                <div class="clue-label">💡 Fun Fact</div>
+                <div id="funFact"></div>
+            </div>
+
+            <!-- Previous Guesses Display (shown at bottom after game ends) -->
+            <div class="guesses-grid" id="guessesGrid" style="display: none;">
+                <!-- Guess slots will be added dynamically -->
             </div>
         </div>
     </div>
@@ -559,6 +810,31 @@
                 <div class="stat-item">
                     <div class="stat-value" id="maxStreak">0</div>
                     <div class="stat-label">Max Streak</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="debugModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🔧 Debug Menu</h2>
+                <button class="close-button" onclick="closeDebug()">×</button>
+            </div>
+            <div class="debug-options">
+                <div class="debug-section">
+                    <h3>Clear Data</h3>
+                    <button class="debug-btn" onclick="clearTodaysGame()">Reset Today's Game</button>
+                    <button class="debug-btn" onclick="clearAllStats()">Clear All Statistics</button>
+                    <button class="debug-btn" onclick="clearBusinessCache()">Clear Business Cache</button>
+                    <button class="debug-btn danger" onclick="clearAllData()">Clear Everything</button>
+                </div>
+                <div class="debug-section">
+                    <h3>Game Info</h3>
+                    <p><strong>Day:</strong> <span id="debugDay"></span></p>
+                    <p><strong>Guesses:</strong> <span id="debugGuesses"></span></p>
+                    <p><strong>Game State:</strong> <span id="debugState"></span></p>
+                    <p><strong>Business:</strong> <span id="debugBusiness"></span></p>
                 </div>
             </div>
         </div>
@@ -679,7 +955,7 @@
             
             if (savedState && lastPlayed === today) {
                 gameState = JSON.parse(savedState);
-                restoreGameUI();
+                // Don't restore UI here - wait until business is loaded
             } else {
                 gameState = {
                     date: today,
@@ -693,6 +969,7 @@
             }
             
             document.getElementById('gameNumber').textContent = `Bizzle #${getDayNumber()}`;
+            updateGuessCounter();
         }
 
         function saveGameState() {
@@ -701,16 +978,39 @@
         }
 
         function restoreGameUI() {
-            const guessSlots = document.querySelectorAll('.guess-slot');
+            // Safety checks for required elements
+            const guessSection = document.getElementById('guessSection');
+            const guessesGrid = document.getElementById('guessesGrid');
+            const hintsContainer = document.getElementById('newHints');
+            
+            if (!guessSection || !guessesGrid || !hintsContainer) {
+                console.error('Required elements not found during UI restore');
+                return;
+            }
+            
+            // If game is complete, hide guess section entirely
+            if (gameState.won || gameState.lost) {
+                guessSection.style.display = 'none';
+            } else {
+                updateGuessCounter();
+            }
+            
+            // Recreate guess slots for existing guesses
             gameState.guesses.forEach((guess, index) => {
-                if (guessSlots[index]) {
-                    guessSlots[index].textContent = guess.text;
-                    guessSlots[index].classList.add(guess.correct ? 'correct' : 'wrong');
-                }
+                addGuessSlot(guess.text, guess.correct);
             });
             
-            for (let i = 0; i < gameState.hintsRevealed; i++) {
-                revealHint(i + 1);
+            // Only show guess history if game is complete
+            if (gameState.won || gameState.lost) {
+                guessesGrid.style.display = 'block';
+            }
+            
+            // Clear any existing hints and recreate them in reverse order (newest first)
+            hintsContainer.innerHTML = '';
+            
+            // Reveal hints in reverse order so newest appears at top
+            for (let i = gameState.hintsRevealed; i >= 1; i--) {
+                revealHint(i);
             }
             
             if (gameState.won || gameState.lost) {
@@ -719,9 +1019,111 @@
         }
 
         function revealHint(hintNumber) {
-            const hint = document.getElementById(`hint${hintNumber}`);
-            if (hint) {
-                hint.classList.add('revealed');
+            const hintsContainer = document.getElementById('newHints');
+            
+            // Don't try to reveal hints if business isn't loaded yet
+            if (!currentBusiness) {
+                console.warn('Cannot reveal hint: business not loaded yet');
+                return;
+            }
+            
+            // Define hint data
+            const hintData = {
+                1: { label: '📍 Neighborhood', content: currentBusiness.Neighborhood },
+                2: { label: '⭐ Signature Item', content: currentBusiness.Signature },
+                3: { label: '🏷️ Category', content: currentBusiness.Category },
+                4: { label: '🛣️ Street', content: currentBusiness.Street }
+            };
+            
+            const hint = hintData[hintNumber];
+            if (!hint) return;
+            
+            // Check if hint already exists to avoid duplicates
+            if (document.getElementById(`hint${hintNumber}`)) {
+                return;
+            }
+            
+            // Create new hint element
+            const hintElement = document.createElement('div');
+            hintElement.className = 'hint';
+            hintElement.id = `hint${hintNumber}`;
+            hintElement.innerHTML = `
+                <div class="hint-label">${hint.label}</div>
+                <div>${hint.content}</div>
+            `;
+            
+            // Add it to the TOP of the hints container (prepend)
+            hintsContainer.prepend(hintElement);
+            
+            // Trigger animation after DOM insertion
+            requestAnimationFrame(() => {
+                hintElement.classList.add('revealed');
+            });
+        }
+
+        function addGuessSlot(guessText, isCorrect) {
+            const guessesGrid = document.getElementById('guessesGrid');
+            const guessSlot = document.createElement('div');
+            guessSlot.className = 'guess-slot';
+            guessSlot.textContent = guessText;
+            
+            if (isCorrect) {
+                guessSlot.classList.add('correct');
+            } else {
+                guessSlot.classList.add('wrong');
+            }
+            
+            guessesGrid.appendChild(guessSlot);
+            // Don't show during gameplay - only at the end
+        }
+
+        function updateGuessCounter() {
+            const counter = document.getElementById('guessCounter');
+            
+            // Safety check - if counter doesn't exist (game might be complete), skip update
+            if (!counter) {
+                return;
+            }
+            
+            const remaining = 5 - gameState.guesses.length;
+            
+            if (gameState.won) {
+                counter.textContent = `Solved in ${gameState.guesses.length} guess${gameState.guesses.length === 1 ? '' : 'es'}!`;
+                counter.className = 'guess-counter';
+            } else if (gameState.lost) {
+                counter.textContent = 'No guesses remaining';
+                counter.className = 'guess-counter danger';
+            } else {
+                counter.textContent = `${remaining} guess${remaining === 1 ? '' : 'es'} remaining`;
+                
+                if (remaining <= 1) {
+                    counter.className = 'guess-counter danger';
+                } else if (remaining <= 2) {
+                    counter.className = 'guess-counter warning';
+                } else {
+                    counter.className = 'guess-counter';
+                }
+            }
+        }
+
+        function giveUp() {
+            if (gameState.won || gameState.lost) return;
+            
+            if (confirm('Are you sure you want to give up and see the answer?')) {
+                gameState.lost = true;
+                gameState.gaveUp = true; // Track that they gave up vs ran out of guesses
+                
+                // Reveal all remaining hints in reverse order (newest first)
+                for (let i = 4; i >= 1; i--) {
+                    if (i > gameState.hintsRevealed) {
+                        revealHint(i);
+                    }
+                }
+                gameState.hintsRevealed = 4;
+                
+                updateGuessCounter();
+                endGame(false);
+                saveGameState();
             }
         }
 
@@ -738,12 +1140,8 @@
                 correct: isCorrect
             });
             
-            const guessSlots = document.querySelectorAll('.guess-slot');
-            const currentSlot = guessSlots[gameState.guesses.length - 1];
-            if (currentSlot) {
-                currentSlot.textContent = guess;
-                currentSlot.classList.add(isCorrect ? 'correct' : 'wrong');
-            }
+            addGuessSlot(guess, isCorrect);
+            updateGuessCounter();
             
             if (isCorrect) {
                 gameState.won = true;
@@ -762,10 +1160,15 @@
         }
 
         function endGame(won) {
-            const input = document.getElementById('guessInput');
-            const submitButton = document.getElementById('submitButton');
-            input.disabled = true;
-            submitButton.disabled = true;
+            // Hide the entire guess section when game is complete
+            const guessSection = document.getElementById('guessSection');
+            guessSection.style.display = 'none';
+            
+            // Show the guess history now that game is over
+            const guessesGrid = document.getElementById('guessesGrid');
+            if (gameState.guesses.length > 0) {
+                guessesGrid.style.display = 'block';
+            }
             
             const gameEnd = document.getElementById('gameEnd');
             const resultMessage = document.getElementById('resultMessage');
@@ -778,7 +1181,11 @@
                 resultMessage.textContent = `Amazing! Got it in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}!`;
                 resultMessage.classList.add('win');
             } else {
-                resultMessage.textContent = 'Better luck tomorrow!';
+                if (gameState.gaveUp) {
+                    resultMessage.textContent = 'No worries! Now you know for next time!';
+                } else {
+                    resultMessage.textContent = 'Better luck tomorrow!';
+                }
                 resultMessage.classList.add('lose');
             }
             
@@ -915,6 +1322,61 @@
             document.getElementById('statsModal').classList.remove('show');
         }
 
+        function showDebug() {
+            updateDebugInfo();
+            document.getElementById('debugModal').classList.add('show');
+        }
+
+        function closeDebug() {
+            document.getElementById('debugModal').classList.remove('show');
+        }
+
+        function updateDebugInfo() {
+            document.getElementById('debugDay').textContent = getDayNumber();
+            document.getElementById('debugGuesses').textContent = gameState.guesses.length;
+            
+            let state = 'Active';
+            if (gameState.won) state = 'Won';
+            else if (gameState.lost) state = 'Lost';
+            document.getElementById('debugState').textContent = state;
+            
+            document.getElementById('debugBusiness').textContent = currentBusiness ? currentBusiness.Name : 'Not loaded';
+        }
+
+        function clearTodaysGame() {
+            if (confirm('Clear today\'s game progress? This will reset your current game.')) {
+                localStorage.removeItem('gameState');
+                localStorage.removeItem('lastPlayed');
+                location.reload();
+            }
+        }
+
+        function clearAllStats() {
+            if (confirm('Clear all statistics? This cannot be undone.')) {
+                localStorage.removeItem('statistics');
+                alert('Statistics cleared!');
+                closeDebug();
+            }
+        }
+
+        function clearBusinessCache() {
+            if (confirm('Clear business data cache? This will force a fresh download.')) {
+                localStorage.removeItem('businessCache');
+                localStorage.removeItem('businessCacheDate');
+                alert('Cache cleared! Refresh to reload data.');
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ DANGER: Clear ALL data? This includes game progress, statistics, and cache. This cannot be undone!')) {
+                if (confirm('Are you absolutely sure? This will delete everything!')) {
+                    localStorage.clear();
+                    alert('All data cleared!');
+                    location.reload();
+                }
+            }
+        }
+
         function startCountdown() {
             function updateCountdown() {
                 const now = new Date();
@@ -1041,16 +1503,18 @@
                 
                 document.getElementById('businessPhoto').src = currentBusiness.PhotoURL;
                 document.getElementById('funFact').textContent = currentBusiness.FunFact;
-                document.getElementById('neighborhood').textContent = currentBusiness.Neighborhood;
-                document.getElementById('signature').textContent = currentBusiness.Signature;
-                document.getElementById('category').textContent = currentBusiness.Category;
-                document.getElementById('street').textContent = currentBusiness.Street;
+                // Note: hint content is now populated dynamically via revealHint() function
                 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('gameContent').style.display = 'block';
                 
                 initializeGame();
                 setupAutocomplete();
+                
+                // Restore UI state after business is loaded
+                if (gameState.hintsRevealed > 0 || gameState.won || gameState.lost) {
+                    restoreGameUI();
+                }
                 
                 document.getElementById('guessInput').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter' && selectedAutocompleteIndex === -1) {
@@ -1062,8 +1526,11 @@
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         const statsModal = document.getElementById('statsModal');
+                        const debugModal = document.getElementById('debugModal');
                         if (statsModal.classList.contains('show')) {
                             closeStats();
+                        } else if (debugModal.classList.contains('show')) {
+                            closeDebug();
                         }
                     }
                 });
