@@ -511,12 +511,10 @@
             display: none;
             text-align: center;
             padding: 20px;
-            background: white;
+            background: #313244; /* Catppuccin Surface0 */
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            position: relative;
-            z-index: 1000;
             border: 3px solid #a6e3a1; /* Catppuccin Green */
         }
 
@@ -1054,16 +1052,16 @@
 
         /* Achievement System Styles */
         .achievement-popup {
-            position: fixed;
-            top: 80px;
-            right: 20px;
+            position: fixed !important;
+            top: 80px !important;
+            right: 20px !important;
             background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%); /* Catppuccin Green to Teal */
             color: #1e1e2e; /* Catppuccin Base for contrast */
             padding: 16px 20px;
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(166, 227, 161, 0.4);
             border: 2px solid #a6e3a1; /* Catppuccin Green */"
-            z-index: 2000;
+            z-index: 999999 !important;
             max-width: 300px;
             opacity: 0;
             transform: translateX(100%);
@@ -2052,6 +2050,8 @@
             if (gameState.won || gameState.lost) {
                 // Game complete
                 guessSection.style.display = 'none';
+                // Hide hints section to avoid redundancy with business details
+                hintsContainer.style.display = 'none';
                 hideMultipleChoice();
                 if (gameState.correctCoordinates) {
                     showMap();
@@ -2230,6 +2230,10 @@
                 gameState.hintsRevealed = 1;
             }
             
+            // Set phase and round exactly like a normal wrong guess
+            gameState.phase = 'multiple-choice';
+            gameState.round = 2;
+            
             // Transition to multiple choice phase
             transitionToMultipleChoice();
             
@@ -2390,6 +2394,11 @@
         function endGame(won) {
             // Hide the multiple choice interface
             hideMultipleChoice();
+            
+            // Hide the hints section to avoid redundancy with business details
+            if (domElements.newHints) {
+                domElements.newHints.style.display = 'none';
+            }
             
             // Show the guess history now that game is over
             if (gameState.guesses.length > 0) {
@@ -3950,6 +3959,11 @@
                 const header = document.querySelector('header');
                 if (header && (!gameState.hintsRevealed || gameState.hintsRevealed === 0)) {
                     header.classList.remove('hidden');
+                }
+                
+                // Ensure hints section is visible for active games (but not completed games)
+                if (domElements.newHints && !gameState.won && !gameState.lost) {
+                    domElements.newHints.style.display = 'block';
                 }
                 
                 initializeGame();
