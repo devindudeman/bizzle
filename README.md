@@ -9,7 +9,9 @@ A fun daily guessing game where players identify San Francisco small businesses 
 3. **Map Phase**: After your first wrong guess, transition to an interactive SF map
 4. **Progressive Zoom**: Each wrong answer zooms the map closer and reveals new hints
 5. **Earn Points**: Get 5 points for first guess, 4 for second, down to 1 for fifth
-6. **Share Results**: Share your score and performance with friends!
+6. **Visit Tracking**: Mark places as visited for +2 bonus points!
+7. **Unlock Achievements**: Build streaks, score perfectly, and explore to earn badges
+8. **Share Results**: Share your score and achievements with friends!
 
 ## 🗺️ Game Features
 
@@ -23,6 +25,7 @@ A fun daily guessing game where players identify San Francisco small businesses 
 - **3 points** - Correct on 3rd guess (neighborhood view)
 - **2 points** - Correct on 4th guess (street-level view)
 - **1 point** - Correct on 5th guess (exact location)
+- **+2 bonus points** - Mark a business as visited!
 - Points accumulate over time in your statistics
 
 ### Progressive Hints
@@ -31,6 +34,25 @@ A fun daily guessing game where players identify San Francisco small businesses 
 3. **Signature Item** (after 2nd wrong guess) 
 4. **Business Category** (after 3rd wrong guess)
 5. **Street Name** (after 4th wrong guess)
+
+### 🏆 Achievement System
+Unlock 13 different achievements across 4 categories:
+- **Streak Badges** - Build consecutive day streaks (3, 7, 15, 30 days)
+- **Score Badges** - Perfect scores and high point totals
+- **Discovery Badges** - Win games and explore new businesses
+- **Visit Badges** - Actually visit businesses in real life!
+
+### 🌫️ Karl the Fog
+- Meet Karl, SF's beloved fog mascot who floats around the interface
+- Toggle Karl on/off with the fog button in the header
+- Karl celebrates when you win or unlock achievements!
+
+### 📱 User Experience
+- **Tutorial** - First-time players get a helpful walkthrough
+- **"Why Bizzle?"** - Learn about our mission to support local businesses
+- **Visit Tracking** - Mark businesses as visited for bonus points
+- **Statistics Dashboard** - Track your progress and achievements
+- **Social Sharing** - Share your results with achievement badges
 
 ## 🏃‍♂️ Running Locally (Quick Start)
 
@@ -270,8 +292,10 @@ The game automatically tracks:
 - Current winning streak
 - Maximum winning streak
 - **Total points earned** across all games
+- **Achievements unlocked** (13 total to collect!)
+- **Businesses visited** in real life
 
-Stats are stored locally in the player's browser and include your cumulative point total over time.
+Stats are stored locally in the player's browser and include your cumulative point total, achievements, and visit history.
 
 ## 🔄 Daily Rotation
 

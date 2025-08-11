@@ -35,7 +35,7 @@ No formal testing framework is configured. Testing is done manually:
 ## Architecture
 
 ### Single-File Application
-- **index.html**: Contains all HTML, CSS, and JavaScript in one file (~2,400+ lines)
+- **index.html**: Contains all HTML, CSS, and JavaScript in one file (~3,600+ lines)
 - Pure vanilla JavaScript, no frameworks or dependencies
 - Client-side only - no backend server required
 
@@ -45,8 +45,12 @@ No formal testing framework is configured. Testing is done manually:
   - **Freeform Phase**: Type business names with autocomplete
   - **Multiple Choice Phase**: Progressive map zooming with location-based choices
 - **Google Maps Integration**: Interactive maps with geocoding and progressive zoom
-- **Points System**: 5-4-3-2-1 points based on guess number
-- **Local Storage**: Game state persistence, statistics, and coordinate caching
+- **Points System**: 5-4-3-2-1 points based on guess number + 2 bonus for visits
+- **Achievement System**: 13 achievements across 4 categories (streaks, scores, discovery, visits)
+- **Visit Tracking**: Mark businesses as visited for bonus points
+- **Karl the Fog**: Animated mascot that floats around (toggleable)
+- **Modals**: Tutorial, Statistics, Why Bizzle?, Debug menu
+- **Local Storage**: Game state, statistics, achievements, visits, coordinate caching
 - **Responsive UI**: Mobile-friendly design with CSS Grid/Flexbox
 
 ### Key Configuration
@@ -81,6 +85,7 @@ No formal testing framework is configured. Testing is done manually:
 - **3 points**: Correct on 3rd guess (map round 3)
 - **2 points**: Correct on 4th guess (map round 4)
 - **1 point**: Correct on 5th guess (final chance)
+- **+2 bonus points**: Mark a business as visited
 - **0 points**: Give up or lose
 - Points accumulate in totalPoints statistic over time
 
@@ -126,6 +131,24 @@ Stored in localStorage as JSON:
   gamesWon: number, 
   currentStreak: number,
   maxStreak: number,
-  totalPoints: number  // NEW: Cumulative points across all games
+  totalPoints: number,  // Cumulative points across all games
+  achievements: string[], // Array of unlocked achievement IDs
+  visitedBusinesses: string[], // Array of visited business names
+  lastPlayed: string // Date string for streak tracking
 }
 ```
+
+## Achievement System
+13 achievements across 4 categories:
+- **Streak Achievements**: 3-day, 7-day, 15-day, 30-day streaks
+- **Score Achievements**: Perfect score, lightning round, centurion (100 points)
+- **Discovery Achievements**: First timer, explorer (10 wins), local expert (25 wins)
+- **Visit Achievements**: Adventurer (1 visit), foodie (5 visits), local legend (15 visits)
+
+## New Features
+- **Tutorial Modal**: Shows on first visit to explain gameplay
+- **"Why Bizzle?" Modal**: Explains mission to support local businesses
+- **Karl the Fog**: Animated mascot that floats around (can be toggled on/off)
+- **Visit Tracking**: "I Went There!" button for bonus points
+- **Achievement Notifications**: Pop-up celebrations when unlocking badges
+- **Enhanced Sharing**: Results include achievements in share text

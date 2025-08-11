@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bizzle - Daily SF Business Guessing Game</title>
+    <title>SF Bizzle - Daily SF Business Guessing Game</title>
     <style>
         * {
             margin: 0;
@@ -83,10 +83,54 @@
             opacity: 1;
         }
 
+        .karl-toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 120px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            opacity: 0.6;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .karl-toggle-button:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .karl-toggle-button.karl-disabled {
+            opacity: 0.3;
+            filter: grayscale(100%);
+        }
+
+        .why-bizzle-button {
+            background: none;
+            border: none;
+            color: #64748B;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin: 8px 0 4px 0;
+            transition: all 0.2s ease;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+
+        .why-bizzle-button:hover {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.05);
+            text-decoration: solid;
+        }
+
         .game-number {
             font-size: 14px;
             color: #64748B;
-            margin-top: 12px;
+            margin-top: 8px;
             font-weight: 600;
             background: rgba(59, 130, 246, 0.1);
             padding: 4px 12px;
@@ -579,9 +623,7 @@
         }
         
         .stats-grid .stat-item:nth-child(n+4) {
-            grid-column: span 2;
-            max-width: 200px;
-            margin: 0 auto;
+            grid-column: span 1;
         }
 
         .stat-item {
@@ -654,6 +696,208 @@
 
         .debug-btn.danger:hover {
             background: #B91C1C;
+        }
+
+        /* Tutorial Styles */
+        .tutorial-content {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .tutorial-step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #F8FAFC;
+            border-radius: 12px;
+            border-left: 4px solid #3B82F6;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: #3B82F6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .step-content h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .step-content p {
+            margin: 0 0 8px 0;
+            color: #4B5563;
+            line-height: 1.5;
+        }
+
+        .step-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .tutorial-start-btn {
+            width: 100%;
+            background: #10B981;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: background 0.2s;
+        }
+
+        .tutorial-start-btn:hover {
+            background: #059669;
+        }
+
+        /* Why Bizzle Modal Styles */
+        .why-bizzle-content {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .mission-section {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: #F8FAFC;
+            border-radius: 12px;
+            border-left: 4px solid #10B981;
+        }
+
+        .mission-section h3 {
+            margin: 0 0 12px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .mission-section p {
+            margin: 0;
+            color: #4B5563;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border-radius: 12px;
+            color: white;
+            margin-top: 8px;
+        }
+
+        .cta-section p {
+            margin: 0;
+            font-size: 16px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Karl the Fog Styles */
+        .karl-the-fog {
+            position: fixed;
+            width: 80px;
+            height: 60px;
+            opacity: 0.3;
+            z-index: 1000;
+            pointer-events: none;
+            transition: transform 0.1s ease-out;
+            user-select: none;
+        }
+
+        .karl-cloud {
+            position: relative;
+            width: 80px;
+            height: 40px;
+            background: #E5E7EB;
+            border-radius: 50px;
+            animation: karl-float 6s ease-in-out infinite;
+        }
+
+        .karl-cloud::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 15px;
+            width: 30px;
+            height: 30px;
+            background: #E5E7EB;
+            border-radius: 50%;
+        }
+
+        .karl-cloud::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            background: #E5E7EB;
+            border-radius: 50%;
+        }
+
+        .karl-eyes {
+            position: absolute;
+            top: 8px;
+            left: 25px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .karl-eye {
+            width: 8px;
+            height: 8px;
+            background: #374151;
+            border-radius: 50%;
+            animation: karl-blink 4s infinite;
+        }
+
+        .karl-mouth {
+            position: absolute;
+            top: 22px;
+            left: 32px;
+            width: 16px;
+            height: 8px;
+            border: 2px solid #374151;
+            border-top: none;
+            border-radius: 0 0 50px 50px;
+            animation: karl-smile 8s ease-in-out infinite;
+        }
+
+        @keyframes karl-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes karl-blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        @keyframes karl-smile {
+            0%, 70%, 100% { transform: scaleX(1); }
+            85% { transform: scaleX(1.2); }
+        }
+
+        @keyframes karl-drift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -30px) rotate(5deg); }
+            50% { transform: translate(-20px, -60px) rotate(-3deg); }
+            75% { transform: translate(-50px, -20px) rotate(2deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
         }
 
         /* Map Styles */
@@ -742,6 +986,203 @@
             display: block;
         }
 
+        /* Achievement System Styles */
+        .achievement-popup {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+            border: 2px solid #16A34A;
+            z-index: 2000;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s ease-out;
+        }
+        
+        .achievement-popup.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .achievement-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .achievement-emoji {
+            font-size: 32px;
+            line-height: 1;
+        }
+        
+        .achievement-text {
+            flex: 1;
+        }
+        
+        .achievement-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+            margin-bottom: 2px;
+        }
+        
+        .achievement-name {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        /* Achievement Showcase Styles */
+        .achievement-showcase {
+            border-top: 1px solid #E5E7EB;
+            padding-top: 20px;
+            margin-top: 16px;
+        }
+        
+        .achievement-showcase h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #374151;
+            text-align: center;
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+        }
+        
+        .achievement-badge {
+            background: #F3F4F6;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 16px 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .achievement-badge.unlocked {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-color: #F59E0B;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .achievement-badge.locked {
+            opacity: 0.5;
+        }
+        
+        .achievement-badge-emoji {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+            filter: grayscale(100%);
+        }
+        
+        .achievement-badge.unlocked .achievement-badge-emoji {
+            filter: none;
+        }
+        
+        .achievement-badge-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            line-height: 1.3;
+        }
+        
+        .achievement-badge.unlocked .achievement-badge-name {
+            color: #92400E;
+        }
+        
+        /* Visit Tracking Styles */
+        .visit-actions {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .visit-button {
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .visit-button:hover {
+            background: linear-gradient(135deg, #16A34A 0%, #15803D 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+        
+        .wishlist-button {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .wishlist-button:hover {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .directions-button {
+            display: block;
+            background: #F3F4F6;
+            color: #374151;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid #E5E7EB;
+        }
+        
+        .directions-button:hover {
+            background: #E5E7EB;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .visited-badge {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            color: #92400E;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            border: 2px solid #F59E0B;
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 16px;
@@ -756,9 +1197,13 @@
                 right: 20px;
             }
 
-            .debug-button {
+            .karl-toggle-button {
                 top: 20px;
                 right: 70px;
+            }
+            .debug-button {
+                top: 20px;
+                right: 120px;
             }
 
             .guess-section {
@@ -808,6 +1253,11 @@
                 padding: 10px 12px;
                 font-size: 14px;
             }
+            
+            .achievement-popup {
+                right: 16px;
+                max-width: calc(100vw - 32px);
+            }
         }
     </style>
 </head>
@@ -815,9 +1265,11 @@
     <div class="container">
         <header>
             <button class="stats-button" onclick="showStats()" aria-label="View Statistics">📊</button>
+            <button class="karl-toggle-button" onclick="toggleKarl()" aria-label="Toggle Karl the Fog" id="karlToggle">🌫️</button>
             <button class="debug-button" onclick="showDebug()" aria-label="Debug Menu">🔧</button>
-            <h1>🏪 Bizzle</h1>
+            <h1>🏪 SF Bizzle</h1>
             <p class="tagline">Guess the SF small business!</p>
+            <button class="why-bizzle-button" onclick="showWhyBizzle()">Why Bizzle? 💝</button>
             <p class="game-number" id="gameNumber"></p>
         </header>
 
@@ -923,6 +1375,16 @@
                     <div class="stat-value" id="totalPoints">0</div>
                     <div class="stat-label">Total Points</div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="achievementCount">0</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+            </div>
+            <div class="achievement-showcase">
+                <h3>🏆 Achievements</h3>
+                <div class="achievement-grid" id="achievementGrid">
+                    <!-- Achievements will be populated dynamically -->
+                </div>
             </div>
         </div>
     </div>
@@ -956,12 +1418,99 @@
         </div>
     </div>
 
+    <!-- Tutorial Modal -->
+    <div class="modal" id="tutorialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🎮 How to Play Bizzle</h2>
+                <button class="close-button" onclick="closeTutorial()">×</button>
+            </div>
+            <div class="tutorial-content">
+                <div class="tutorial-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>📸 Study the Photo</h3>
+                        <p>Look at the interior photo and read the fun fact about today's mystery business.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>✏️ Make Your Guess</h3>
+                        <p>Type the business name - autocomplete will help you find SF businesses!</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>🗺️ Use the Map</h3>
+                        <p>After your first wrong guess, an interactive map appears with multiple choice options. Each wrong answer reveals more hints and zooms closer!</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>🎯 Earn Points</h3>
+                        <p><strong>5 pts</strong> first guess • <strong>4 pts</strong> second guess • <strong>3 pts</strong> third guess • <strong>2 pts</strong> fourth guess • <strong>1 pt</strong> fifth guess</p>
+                        <p>Get <strong>+2 bonus points</strong> when you mark a place as visited!</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>🏆 Unlock Achievements</h3>
+                        <p>Build streaks, score perfectly, discover new places, and visit businesses in real life to earn achievement badges!</p>
+                    </div>
+                </div>
+                <button class="tutorial-start-btn" onclick="closeTutorial()">Start Playing! 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Bizzle Modal -->
+    <div class="modal" id="whyBizzleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">💝 Why Bizzle?</h2>
+                <button class="close-button" onclick="closeWhyBizzle()">×</button>
+            </div>
+            <div class="why-bizzle-content">
+                <div class="mission-section">
+                    <h3>🏪 Our Mission</h3>
+                    <p>We believe in the power of community and the importance of supporting local small businesses. Every neighborhood gem has a story, and every local business owner has poured their heart into creating something special.</p>
+                </div>
+                
+                <div class="mission-section">
+                    <h3>🌟 Why Shopping Local Matters</h3>
+                    <p>When you visit a local business, you're not just making a purchase—you're investing in your community, supporting someone's dream, and helping preserve the unique character that makes San Francisco special.</p>
+                </div>
+                
+                <div class="mission-section">
+                    <h3>🔍 Discover Hidden Gems</h3>
+                    <p>San Francisco is full of incredible small businesses that deserve to be discovered! Bizzle is our way of helping you explore the amazing places in your backyard and connecting you with the passionate people behind them.</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Karl the Fog -->
+    <div class="karl-the-fog" id="karlTheFog">
+        <div class="karl-cloud">
+            <div class="karl-eyes">
+                <div class="karl-eye"></div>
+                <div class="karl-eye"></div>
+            </div>
+            <div class="karl-mouth"></div>
+        </div>
+    </div>
+
     <!-- Google Maps JavaScript API with proper async loading -->
     <script>
         // Modern async Google Maps loading
         function initGoogleMaps() {
             const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAkcxjO6ptmguM6UnYEu2CkdI2cIcsr5Ww&libraries=places&callback=onGoogleMapsReady&loading=async`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAkcxjO6ptmguM6UnYEu2CkdI2cIcsr5Ww&libraries=places,marker&callback=onGoogleMapsReady&loading=async`;
             script.async = true;
             script.defer = true;
             document.head.appendChild(script);
@@ -986,12 +1535,169 @@
     </script>
     
     <script>
-        const SHEET_ID = '1aCuaC2pMPs7cnaBc9-reGxq8SKJIpIaCRd6rhUtTJgg';
-        const API_KEY = 'AIzaSyAkcxjO6ptmguM6UnYEu2CkdI2cIcsr5Ww';
-        const RANGE = 'Sheet1!A:J';
+        // Configuration Object - All game settings in one place
+        const CONFIG = {
+            // API Configuration
+            SHEET_ID: '1aCuaC2pMPs7cnaBc9-reGxq8SKJIpIaCRd6rhUtTJgg',
+            API_KEY: 'AIzaSyAkcxjO6ptmguM6UnYEu2CkdI2cIcsr5Ww',
+            SHEET_RANGE: 'Sheet1!A:J',
+            
+            // Game Settings
+            MAX_GUESSES: 5,
+            GAME_START_DATE: '2025-08-10',
+            FUZZY_MATCH_THRESHOLD: 0.8,
+            
+            // Points System
+            POINTS: {
+                FIRST_GUESS: 5,
+                SECOND_GUESS: 4,
+                THIRD_GUESS: 3,
+                FOURTH_GUESS: 2,
+                FIFTH_GUESS: 1,
+                NO_POINTS: 0
+            },
+            
+            // Map Configuration
+            SF_CENTER: { lat: 37.7749, lng: -122.4194 },
+            ZOOM_LEVELS: {
+                1: { zoom: 11, label: 'City-wide' },
+                2: { zoom: 13, label: 'Region' },
+                3: { zoom: 15, label: 'Neighborhood' },
+                4: { zoom: 17, label: 'Street' },
+                5: { zoom: 19, label: 'Exact' }
+            },
+            
+            // Round Configuration
+            ROUNDS: {
+                2: { radius: 8, maxOptions: 8, label: 'SF-wide' },
+                3: { radius: 2, maxOptions: 6, label: 'Neighborhood' },
+                4: { radius: 0.5, maxOptions: 4, label: 'Nearby' }
+            },
+            
+            // Timing Configuration
+            TIMEOUTS: {
+                MAP_SETTLE: 1000,
+                CHOICE_FEEDBACK: 1500,
+                WIN_CELEBRATION: 1500,
+                LOSE_REVEAL: 1000,
+                MARKER_DROP: 800,
+                INFO_WINDOW: 1000
+            },
+            
+            // Cache Configuration
+            CACHE_DURATION: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+            
+            // Hint Configuration
+            HINTS: {
+                1: { label: '📍 Neighborhood', field: 'Neighborhood' },
+                2: { label: '⭐ Signature Item', field: 'Signature' },
+                3: { label: '🏷️ Category', field: 'Category' },
+                4: { label: '🛣️ Street', field: 'Street' }
+            },
+            
+            // Achievement Configuration
+            ACHIEVEMENTS: {
+                // Streak Achievements
+                streak_3: { name: '3-Day Streak', emoji: '🔥', description: 'Play for 3 days in a row', type: 'streak' },
+                streak_7: { name: '7-Day Streak', emoji: '⚡', description: 'Play for 7 days in a row', type: 'streak' },
+                streak_15: { name: '15-Day Streak', emoji: '🌟', description: 'Play for 15 days in a row', type: 'streak' },
+                streak_30: { name: '30-Day Streak', emoji: '👑', description: 'Play for 30 days in a row', type: 'streak' },
+                
+                // Score Achievements
+                perfect: { name: 'Perfect Score', emoji: '🎯', description: 'Get 5 points in a single game', type: 'score' },
+                lightning: { name: 'Lightning Round', emoji: '⚡', description: 'Get 4+ points in 5 different games', type: 'score' },
+                centurion: { name: 'Centurion', emoji: '💯', description: 'Reach 100 total points', type: 'score' },
+                
+                // Discovery Achievements
+                first_timer: { name: 'First Timer', emoji: '🎉', description: 'Win your first game', type: 'discovery' },
+                explorer: { name: 'Explorer', emoji: '🗺️', description: 'Win 10 games', type: 'discovery' },
+                local_expert: { name: 'Local Expert', emoji: '🏆', description: 'Win 25 games', type: 'discovery' },
+                
+                // Visit Achievements
+                adventurer: { name: 'Adventurer', emoji: '🚶', description: 'Visit 1 business in real life', type: 'visit' },
+                foodie: { name: 'Foodie', emoji: '🍽️', description: 'Visit 5 businesses in real life', type: 'visit' },
+                local_legend: { name: 'Local Legend', emoji: '🌆', description: 'Visit 15 businesses in real life', type: 'visit' }
+            },
+            
+            // Visit Bonus Points
+            VISIT_BONUS: 2
+        };
         
-        // San Francisco center coordinates
-        const SF_CENTER = { lat: 37.7749, lng: -122.4194 };
+        // DOM Elements Cache - populated on initialization
+        let domElements = {};
+        
+        /**
+         * Initialize DOM element cache to avoid repeated getElementById calls
+         */
+        function initializeDOMCache() {
+            domElements = {
+                // Loading and content
+                loading: document.getElementById('loading'),
+                gameContent: document.getElementById('gameContent'),
+                errorMessage: document.getElementById('errorMessage'),
+                
+                // Header elements
+                gameNumber: document.getElementById('gameNumber'),
+                
+                // Game elements
+                guessSection: document.getElementById('guessSection'),
+                guessCounter: document.getElementById('guessCounter'),
+                guessInput: document.getElementById('guessInput'),
+                submitButton: document.getElementById('submitButton'),
+                giveUpButton: document.getElementById('giveUpButton'),
+                autocompleteDropdown: document.getElementById('autocompleteDropdown'),
+                
+                // Photo and hints
+                businessPhoto: document.getElementById('businessPhoto'),
+                funFact: document.getElementById('funFact'),
+                newHints: document.getElementById('newHints'),
+                
+                // Map elements
+                mapContainer: document.getElementById('mapContainer'),
+                map: document.getElementById('map'),
+                mapLabel: document.querySelector('.map-label'),
+                
+                // Multiple choice
+                multipleChoiceContainer: document.getElementById('multipleChoiceContainer'),
+                choiceGrid: document.getElementById('choiceGrid'),
+                
+                // Game end
+                gameEnd: document.getElementById('gameEnd'),
+                resultMessage: document.getElementById('resultMessage'),
+                businessNameReveal: document.getElementById('businessNameReveal'),
+                businessDetails: document.getElementById('businessDetails'),
+                shareButton: document.getElementById('shareButton'),
+                countdownTime: document.getElementById('countdownTime'),
+                
+                // Guesses grid
+                guessesGrid: document.getElementById('guessesGrid'),
+                
+                // Modals
+                statsModal: document.getElementById('statsModal'),
+                debugModal: document.getElementById('debugModal'),
+                tutorialModal: document.getElementById('tutorialModal'),
+                whyBizzleModal: document.getElementById('whyBizzleModal'),
+                
+                // Statistics
+                gamesPlayed: document.getElementById('gamesPlayed'),
+                winPercentage: document.getElementById('winPercentage'),
+                currentStreak: document.getElementById('currentStreak'),
+                maxStreak: document.getElementById('maxStreak'),
+                totalPoints: document.getElementById('totalPoints'),
+                achievementCount: document.getElementById('achievementCount'),
+                achievementGrid: document.getElementById('achievementGrid'),
+                
+                // Debug elements
+                debugDay: document.getElementById('debugDay'),
+                debugGuesses: document.getElementById('debugGuesses'),
+                debugState: document.getElementById('debugState'),
+                debugBusiness: document.getElementById('debugBusiness'),
+
+                // Karl the Fog
+                karlTheFog: document.getElementById('karlTheFog'),
+                karlToggle: document.getElementById('karlToggle')
+            };
+        }
 
         let currentBusiness = null;
         let allBusinesses = [];
@@ -1026,7 +1732,7 @@
                     return JSON.parse(cachedData);
                 }
                 
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${CONFIG.SHEET_RANGE}?key=${CONFIG.API_KEY}`;
                 const response = await fetch(url);
                 
                 if (!response.ok) {
@@ -1068,20 +1774,27 @@
                 return scheduledBusiness;
             }
             
-            const daysSinceEpoch = Math.floor((new Date() - new Date('2025-08-10')) / (1000 * 60 * 60 * 24));
+            const daysSinceEpoch = Math.floor((new Date() - new Date(CONFIG.GAME_START_DATE)) / (1000 * 60 * 60 * 24));
             const index = daysSinceEpoch % businesses.length;
             return businesses[index];
         }
 
         function getDayNumber() {
-            const startDate = new Date('2025-08-10'); // Game launch date
+            const startDate = new Date(CONFIG.GAME_START_DATE);
             const today = new Date();
             const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-            return Math.max(1, daysDiff + 1); // Ensure it's at least 1
+            return Math.max(1, daysDiff + 1);
         }
 
-        // Geocoding system with localStorage caching
+        /**
+         * Geocoding system with localStorage caching and improved error handling
+         */
         async function geocodeAddress(address) {
+            if (!address || !address.trim()) {
+                console.warn('Empty address provided for geocoding');
+                return CONFIG.SF_CENTER;
+            }
+            
             try {
                 // Check cache first
                 const cacheKey = `coords_${address}`;
@@ -1092,7 +1805,12 @@
                 
                 // Geocode via API if not cached
                 const encodedAddress = encodeURIComponent(address);
-                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${API_KEY}`);
+                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${CONFIG.API_KEY}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Geocoding HTTP error: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data.status === 'OK' && data.results.length > 0) {
@@ -1105,20 +1823,24 @@
                     localStorage.setItem(cacheKey, JSON.stringify(coords));
                     return coords;
                 } else {
-                    console.warn('Geocoding failed for address:', address, 'Status:', data.status);
-                    // Return SF center as fallback
-                    return SF_CENTER;
+                    console.warn(`Geocoding failed for "${address}": ${data.status}`);
+                    return CONFIG.SF_CENTER;
                 }
             } catch (error) {
-                console.error('Geocoding error:', error);
-                // Return SF center as fallback
-                return SF_CENTER;
+                console.error(`Geocoding error for "${address}":`, error.message);
+                return CONFIG.SF_CENTER;
             }
         }
 
         function calculatePoints(guessNumber) {
-            // Points: 5 for first guess, 4 for second, 3 for third, 2 for fourth, 1 for fifth
-            return Math.max(1, 6 - guessNumber);
+            const pointsMap = {
+                1: CONFIG.POINTS.FIRST_GUESS,
+                2: CONFIG.POINTS.SECOND_GUESS,
+                3: CONFIG.POINTS.THIRD_GUESS,
+                4: CONFIG.POINTS.FOURTH_GUESS,
+                5: CONFIG.POINTS.FIFTH_GUESS
+            };
+            return pointsMap[guessNumber] || CONFIG.POINTS.NO_POINTS;
         }
 
         function fuzzyMatch(guess, answer) {
@@ -1142,7 +1864,7 @@
                 if (shorter[i] === longer[i]) matches++;
             }
             
-            return matches / longer.length >= 0.8;
+            return matches / longer.length >= CONFIG.FUZZY_MATCH_THRESHOLD;
         }
 
         function initializeGame() {
@@ -1171,7 +1893,7 @@
                 saveGameState();
             }
             
-            document.getElementById('gameNumber').textContent = `Bizzle #${getDayNumber()}`;
+            domElements.gameNumber.textContent = `Bizzle #${getDayNumber()}`;
             updateGuessCounter();
         }
 
@@ -1237,7 +1959,7 @@
         }
 
         function revealHint(hintNumber) {
-            const hintsContainer = document.getElementById('newHints');
+            const hintsContainer = domElements.newHints;
             
             // Don't try to reveal hints if business isn't loaded yet
             if (!currentBusiness) {
@@ -1245,16 +1967,14 @@
                 return;
             }
             
-            // Define hint data
-            const hintData = {
-                1: { label: '📍 Neighborhood', content: currentBusiness.Neighborhood },
-                2: { label: '⭐ Signature Item', content: currentBusiness.Signature },
-                3: { label: '🏷️ Category', content: currentBusiness.Category },
-                4: { label: '🛣️ Street', content: currentBusiness.Street }
-            };
+            // Get hint configuration from CONFIG
+            const hintConfig = CONFIG.HINTS[hintNumber];
+            if (!hintConfig) return;
             
-            const hint = hintData[hintNumber];
-            if (!hint) return;
+            const hint = {
+                label: hintConfig.label,
+                content: currentBusiness[hintConfig.field]
+            };
             
             // Check if hint already exists to avoid duplicates
             if (document.getElementById(`hint${hintNumber}`)) {
@@ -1296,14 +2016,14 @@
         }
 
         function updateGuessCounter() {
-            const counter = document.getElementById('guessCounter');
+            const counter = domElements.guessCounter;
             
             // Safety check - if counter doesn't exist (game might be complete), skip update
             if (!counter) {
                 return;
             }
             
-            const remaining = 5 - gameState.guesses.length;
+            const remaining = CONFIG.MAX_GUESSES - gameState.guesses.length;
             
             if (gameState.won) {
                 counter.textContent = `Solved in ${gameState.guesses.length} guess${gameState.guesses.length === 1 ? '' : 'es'}!`;
@@ -1352,7 +2072,7 @@
         }
 
         function submitGuess() {
-            const input = document.getElementById('guessInput');
+            const input = domElements.guessInput;
             const guess = input.value.trim();
             
             if (!guess || gameState.won || gameState.lost) return;
@@ -1370,6 +2090,7 @@
             if (isCorrect) {
                 gameState.won = true;
                 gameState.pointsEarned = calculatePoints(gameState.guesses.length);
+                karlCelebrate(); // Karl celebrates the win!
                 endGame(true);
             } else {
                 // Transition to multiple choice mode after first wrong guess
@@ -1384,54 +2105,88 @@
         }
 
         async function transitionToMultipleChoice() {
-            console.log('Transitioning to multiple choice mode');
-            
-            // Hide the free-form guess section
-            const guessSection = document.getElementById('guessSection');
-            guessSection.style.display = 'none';
-            
-            // Show the map with initial SF-wide view
-            showMap();
-            
-            // Wait for coordinates if not already available
-            if (!gameState.correctCoordinates) {
-                console.log('Geocoding business address...');
-                gameState.correctCoordinates = await geocodeAddress(currentBusiness.Address);
-                console.log('Coordinates obtained:', gameState.correctCoordinates);
+            try {
+                // Hide the free-form guess section
+                domElements.guessSection.style.display = 'none';
+                
+                // Show the map with initial SF-wide view
+                showMap();
+                
+                // Ensure coordinates are available
+                if (!gameState.correctCoordinates) {
+                    gameState.correctCoordinates = await geocodeAddress(currentBusiness.Address);
+                }
+                
+                // Start with SF-wide view (zoom level 1) before first multiple choice round
+                updateMapZoom(1, gameState.correctCoordinates);
+                
+                // Wait a moment for map to settle, then start first multiple choice round
+                setTimeout(() => {
+                    progressToNextRound();
+                }, CONFIG.TIMEOUTS.MAP_SETTLE);
+                
+            } catch (error) {
+                console.error('Error transitioning to multiple choice:', error);
+                // Continue with fallback behavior
+                showMap();
+                setTimeout(() => {
+                    progressToNextRound();
+                }, CONFIG.TIMEOUTS.MAP_SETTLE);
             }
-            
-            // Start with SF-wide view (zoom level 1) before first multiple choice round
-            updateMapZoom(1, gameState.correctCoordinates);
-            
-            // Wait a moment for map to settle, then start first multiple choice round
-            setTimeout(() => {
-                progressToNextRound();
-            }, 1000);
         }
 
-        async function progressToNextRound() {
-            console.log(`Starting round ${gameState.round}`);
+        /**
+         * Update map label with loading or completion status
+         */
+        function updateMapLabel(config, isLoading = false) {
+            const mapLabel = domElements.mapLabel;
+            if (!mapLabel) return;
             
-            // Update map zoom based on current round (progressive zoom)
-            const zoomLevel = gameState.round; // Round 2=zoom level 2, Round 3=zoom level 3, etc.
-            updateMapZoom(zoomLevel, gameState.correctCoordinates);
-            
-            // Progressive radius and option count based on round
-            const roundConfig = {
-                2: { radius: 8, maxOptions: 8, label: 'SF-wide' },  // City-wide
-                3: { radius: 2, maxOptions: 6, label: 'Neighborhood' }, // Neighborhood
-                4: { radius: 0.5, maxOptions: 4, label: 'Nearby' }  // Street-level
-            };
-            
-            const config = roundConfig[gameState.round] || roundConfig[2];
-            
-            // Update map label with loading state
-            const mapLabel = document.querySelector('.map-label');
-            if (mapLabel) {
+            if (isLoading) {
                 mapLabel.textContent = `🗺️ Loading ${config.label.toLowerCase()} options...`;
+            } else {
+                mapLabel.textContent = `🗺️ ${config.label} - Round ${gameState.round}`;
+            }
+        }
+        
+        /**
+         * Limit multiple choice options based on round configuration
+         */
+        function limitMultipleChoiceOptions(options, config) {
+            if (options.length <= config.maxOptions) {
+                return options;
             }
             
+            const correctAnswer = currentBusiness.Name;
+            const otherOptions = options.filter(opt => opt !== correctAnswer);
+            const limitedOthers = shuffleArray(otherOptions).slice(0, config.maxOptions - 1);
+            return shuffleArray([...limitedOthers, correctAnswer]);
+        }
+        
+        /**
+         * Reveal the appropriate hint for the current round
+         */
+        function revealRoundHint() {
+            const hintMap = { 2: 1, 3: 2, 4: 3 }; // Round to hint number mapping
+            const hintNumber = hintMap[gameState.round];
+            
+            if (hintNumber && hintNumber <= 4) {
+                revealHint(hintNumber);
+                gameState.hintsRevealed = Math.max(gameState.hintsRevealed, hintNumber);
+            }
+        }
+        
+        async function progressToNextRound() {
             try {
+                // Update map zoom based on current round (progressive zoom)
+                updateMapZoom(gameState.round, gameState.correctCoordinates);
+                
+                // Get round configuration from CONFIG
+                const config = CONFIG.ROUNDS[gameState.round] || CONFIG.ROUNDS[2];
+                
+                // Update map label with loading state
+                updateMapLabel(config, true);
+                
                 // Generate multiple choice options
                 let options = await generateMultipleChoice(
                     currentBusiness.Category, 
@@ -1439,89 +2194,61 @@
                     config.radius
                 );
                 
-                // Limit options based on round (more specific = fewer options)
-                if (options.length > config.maxOptions) {
-                    const correctAnswer = currentBusiness.Name;
-                    const otherOptions = options.filter(opt => opt !== correctAnswer);
-                    const limitedOthers = shuffleArray(otherOptions).slice(0, config.maxOptions - 1);
-                    options = shuffleArray([...limitedOthers, correctAnswer]);
-                }
-                
+                // Limit options based on round configuration
+                options = limitMultipleChoiceOptions(options, config);
                 gameState.multipleChoiceOptions = options;
                 
-                // Update map label
-                if (mapLabel) {
-                    mapLabel.textContent = `🗺️ ${config.label} - Round ${gameState.round}`;
-                }
+                // Update map label to show ready state
+                updateMapLabel(config, false);
                 
                 // Show multiple choice UI
                 showMultipleChoice(options);
                 
             } catch (error) {
-                console.error('Error in progressToNextRound:', error);
+                console.error(`Error in round ${gameState.round}:`, error.message);
                 
                 // Fallback to basic options
+                const config = CONFIG.ROUNDS[gameState.round] || CONFIG.ROUNDS[2];
                 const fallbackOptions = generateFallbackOptions();
                 gameState.multipleChoiceOptions = fallbackOptions;
                 
-                if (mapLabel) {
-                    mapLabel.textContent = `🗺️ ${config.label} - Find the business`;
-                }
-                
+                updateMapLabel(config, false);
                 showMultipleChoice(fallbackOptions);
             }
             
-            // Reveal a hint based on the round
-            const hintMap = {
-                2: 1, // Neighborhood
-                3: 2, // Signature Item
-                4: 3  // Category
-            };
-            
-            const hintNumber = hintMap[gameState.round];
-            if (hintNumber && hintNumber <= 4) {
-                revealHint(hintNumber);
-                gameState.hintsRevealed = Math.max(gameState.hintsRevealed, hintNumber);
-            }
+            // Reveal appropriate hint for this round
+            revealRoundHint();
         }
 
         function endGame(won) {
-            console.log('🎉 ENDING GAME - Won:', won);
-            
             // Hide the multiple choice interface
             hideMultipleChoice();
             
             // Show the guess history now that game is over
-            const guessesGrid = document.getElementById('guessesGrid');
             if (gameState.guesses.length > 0) {
-                guessesGrid.style.display = 'block';
+                domElements.guessesGrid.style.display = 'block';
             }
             
-            const gameEnd = document.getElementById('gameEnd');
-            const resultMessage = document.getElementById('resultMessage');
-            const businessNameReveal = document.getElementById('businessNameReveal');
-            const businessDetails = document.getElementById('businessDetails');
+            const gameEnd = domElements.gameEnd;
+            const resultMessage = domElements.resultMessage;
+            const businessNameReveal = domElements.businessNameReveal;
+            const businessDetails = domElements.businessDetails;
             
-            console.log('🎯 Game end element found:', !!gameEnd);
-            console.log('📍 Current gameEnd display style:', gameEnd?.style.display);
-            console.log('📍 Current gameEnd classes:', gameEnd?.className);
-            
-            // Make sure game end section is visible with multiple approaches
-            if (gameEnd) {
-                gameEnd.style.display = 'block';
-                gameEnd.style.visibility = 'visible';
-                gameEnd.style.opacity = '1';
-                gameEnd.classList.add('show');
-                
-                // Scroll to game end section
-                setTimeout(() => {
-                    gameEnd.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-                
-                console.log('✅ Game end section made visible');
-            } else {
-                console.error('❌ Game end element not found!');
+            if (!gameEnd) {
+                console.error('Game end element not found');
+                return;
             }
+            
+            // Make game end section visible
+            gameEnd.style.display = 'block';
+            gameEnd.style.visibility = 'visible';
+            gameEnd.style.opacity = '1';
+            gameEnd.classList.add('show');
+            
+            // Scroll to game end section
+            setTimeout(() => {
+                gameEnd.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
             
             if (won) {
                 resultMessage.textContent = `🎉 Amazing! Got it in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}! (+${gameState.pointsEarned} points)`;
@@ -1537,12 +2264,37 @@
             
             businessNameReveal.textContent = currentBusiness.Name;
             
+            // Check if business has been visited
+            const achievements = getAchievementData();
+            const businessId = currentBusiness.Name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+            const isVisited = achievements.visitedBusinesses.includes(businessId);
+            
+            
             businessDetails.innerHTML = `
-                <p><strong>Address:</strong> ${currentBusiness.Address}</p>
-                <p><strong>Neighborhood:</strong> ${currentBusiness.Neighborhood}</p>
-                <p><strong>Category:</strong> ${currentBusiness.Category}</p>
-                <p><strong>Signature:</strong> ${currentBusiness.Signature}</p>
-                ${currentBusiness.Website ? `<p><strong>Website:</strong> <a href="${currentBusiness.Website}" target="_blank">${currentBusiness.Website}</a></p>` : ''}
+                <div class="business-info">
+                    <p><strong>Address:</strong> ${currentBusiness.Address}</p>
+                    <p><strong>Neighborhood:</strong> ${currentBusiness.Neighborhood}</p>
+                    <p><strong>Category:</strong> ${currentBusiness.Category}</p>
+                    <p><strong>Signature:</strong> ${currentBusiness.Signature}</p>
+                    ${currentBusiness.Website ? `<p><strong>Website:</strong> <a href="${currentBusiness.Website}" target="_blank">${currentBusiness.Website}</a></p>` : ''}
+                </div>
+                
+                
+                <div class="visit-actions">
+                    ${!isVisited ? `
+                        <button class="visit-button" onclick="markAsVisited('${businessId}')">
+                            📍 I Went Here! (+${CONFIG.VISIT_BONUS} bonus points)
+                        </button>
+                        <button class="wishlist-button" onclick="addToWishlist('${businessId}')">
+                            💭 Want to Visit
+                        </button>
+                    ` : `
+                        <div class="visited-badge">✅ You've been here!</div>
+                    `}
+                    <a href="https://maps.google.com/?q=${encodeURIComponent(currentBusiness.Name + ', ' + currentBusiness.Address)}" target="_blank" class="directions-button">
+                        🗺️ Get Directions
+                    </a>
+                </div>
             `;
             
             // Only update statistics once per game
@@ -1552,8 +2304,6 @@
                 saveGameState();
             }
             startCountdown();
-            
-            console.log('🏁 endGame function completed');
         }
 
         function generateShareText() {
@@ -1569,8 +2319,33 @@
                 }
             }
             
+            // Add achievements and stats to share text
+            const stats = JSON.parse(localStorage.getItem('statistics') || '{"totalPoints":0,"gamesWon":0}');
+            const achievements = getAchievementData();
+            
+            let shareText = `Bizzle #${dayNumber} ${guessCount}/5`;
+            
+            if (gameState.pointsEarned > 0) {
+                shareText += ` (+${gameState.pointsEarned} points)`;
+            }
+            
+            shareText += `\n${emojiGrid}`;
+            
+            // Add achievement unlock if any new achievements were unlocked today
+            if (gameState.won && achievements.unlocked.length > 0) {
+                const recentAchievement = achievements.unlocked[achievements.unlocked.length - 1];
+                const achievement = CONFIG.ACHIEVEMENTS[recentAchievement];
+                if (achievement && gameState.pointsEarned === 5 && recentAchievement === 'perfect') {
+                    shareText += `\n🏆 Achievement Unlocked: ${achievement.name}!`;
+                }
+            }
+            
+            shareText += `\n💯 Total: ${stats.totalPoints} pts | 🏆 ${achievements.unlocked.length} achievements`;
+            
             const url = window.location.href.split('?')[0];
-            return `Bizzle #${dayNumber} ${guessCount}/5\n${emojiGrid}\n\nPlay at ${url}`;
+            shareText += `\n\nDiscover SF businesses at ${url}`;
+            
+            return shareText;
         }
 
         function shareResult() {
@@ -1643,6 +2418,137 @@
             }
             
             localStorage.setItem('statistics', JSON.stringify(stats));
+            
+            // Check for new achievements after updating stats
+            checkAchievements(stats, won);
+        }
+        
+        /**
+         * Achievement System Functions
+         */
+        function getAchievementData() {
+            let data = localStorage.getItem('achievements');
+            if (!data) {
+                data = {
+                    unlocked: [],
+                    progress: {},
+                    visitedBusinesses: [],
+                    lightningCount: 0 // Track 4+ point games for lightning achievement
+                };
+            } else {
+                data = JSON.parse(data);
+            }
+            return data;
+        }
+        
+        function saveAchievementData(data) {
+            localStorage.setItem('achievements', JSON.stringify(data));
+        }
+        
+        function checkAchievements(stats, won) {
+            const achievements = getAchievementData();
+            const newAchievements = [];
+            
+            // Check streak achievements
+            if (stats.currentStreak >= 3 && !achievements.unlocked.includes('streak_3')) {
+                newAchievements.push('streak_3');
+            }
+            if (stats.currentStreak >= 7 && !achievements.unlocked.includes('streak_7')) {
+                newAchievements.push('streak_7');
+            }
+            if (stats.currentStreak >= 15 && !achievements.unlocked.includes('streak_15')) {
+                newAchievements.push('streak_15');
+            }
+            if (stats.currentStreak >= 30 && !achievements.unlocked.includes('streak_30')) {
+                newAchievements.push('streak_30');
+            }
+            
+            // Check score achievements
+            if (gameState.pointsEarned === 5 && !achievements.unlocked.includes('perfect')) {
+                newAchievements.push('perfect');
+            }
+            if (gameState.pointsEarned >= 4) {
+                achievements.lightningCount = (achievements.lightningCount || 0) + 1;
+                if (achievements.lightningCount >= 5 && !achievements.unlocked.includes('lightning')) {
+                    newAchievements.push('lightning');
+                }
+            }
+            if (stats.totalPoints >= 100 && !achievements.unlocked.includes('centurion')) {
+                newAchievements.push('centurion');
+            }
+            
+            // Check discovery achievements
+            if (won) {
+                if (stats.gamesWon === 1 && !achievements.unlocked.includes('first_timer')) {
+                    newAchievements.push('first_timer');
+                }
+                if (stats.gamesWon >= 10 && !achievements.unlocked.includes('explorer')) {
+                    newAchievements.push('explorer');
+                }
+                if (stats.gamesWon >= 25 && !achievements.unlocked.includes('local_expert')) {
+                    newAchievements.push('local_expert');
+                }
+            }
+            
+            // Check visit achievements
+            const visitCount = achievements.visitedBusinesses.length;
+            if (visitCount >= 1 && !achievements.unlocked.includes('adventurer')) {
+                newAchievements.push('adventurer');
+            }
+            if (visitCount >= 5 && !achievements.unlocked.includes('foodie')) {
+                newAchievements.push('foodie');
+            }
+            if (visitCount >= 15 && !achievements.unlocked.includes('local_legend')) {
+                newAchievements.push('local_legend');
+            }
+            
+            // Add new achievements and show notifications
+            if (newAchievements.length > 0) {
+                achievements.unlocked = [...achievements.unlocked, ...newAchievements];
+                saveAchievementData(achievements);
+                showAchievementNotifications(newAchievements);
+            }
+        }
+        
+        function showAchievementNotifications(achievementIds) {
+            achievementIds.forEach((id, index) => {
+                setTimeout(() => {
+                    const achievement = CONFIG.ACHIEVEMENTS[id];
+                    showAchievementPopup(achievement);
+                }, index * 1000); // Stagger notifications
+            });
+        }
+        
+        function showAchievementPopup(achievement) {
+            karlCelebrate(); // Karl celebrates achievements too!
+            
+            // Create achievement notification popup
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup';
+            popup.innerHTML = `
+                <div class="achievement-content">
+                    <div class="achievement-emoji">${achievement.emoji}</div>
+                    <div class="achievement-text">
+                        <div class="achievement-title">Achievement Unlocked!</div>
+                        <div class="achievement-name">${achievement.name}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            // Animate in
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 100);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                popup.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(popup);
+                }, 500);
+            }, 4000);
         }
 
         function displayStatistics() {
@@ -1663,44 +2569,355 @@
                 }
             }
             
-            document.getElementById('gamesPlayed').textContent = stats.gamesPlayed;
-            document.getElementById('winPercentage').textContent = 
+            domElements.gamesPlayed.textContent = stats.gamesPlayed;
+            domElements.winPercentage.textContent = 
                 stats.gamesPlayed > 0 
                     ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) + '%'
                     : '0%';
-            document.getElementById('currentStreak').textContent = stats.currentStreak;
-            document.getElementById('maxStreak').textContent = stats.maxStreak;
-            document.getElementById('totalPoints').textContent = stats.totalPoints;
+            domElements.currentStreak.textContent = stats.currentStreak;
+            domElements.maxStreak.textContent = stats.maxStreak;
+            domElements.totalPoints.textContent = stats.totalPoints;
+            
+            // Display achievements
+            displayAchievements();
         }
+        
+        function displayAchievements() {
+            const achievements = getAchievementData();
+            const achievementGrid = domElements.achievementGrid;
+            
+            // Update achievement count
+            domElements.achievementCount.textContent = achievements.unlocked.length;
+            
+            // Clear existing achievement badges
+            achievementGrid.innerHTML = '';
+            
+            // Create achievement badges for all achievements
+            Object.keys(CONFIG.ACHIEVEMENTS).forEach(achievementId => {
+                const achievement = CONFIG.ACHIEVEMENTS[achievementId];
+                const isUnlocked = achievements.unlocked.includes(achievementId);
+                
+                const badge = document.createElement('div');
+                badge.className = `achievement-badge ${isUnlocked ? 'unlocked' : 'locked'}`;
+                badge.title = achievement.description;
+                badge.innerHTML = `
+                    <span class="achievement-badge-emoji">${achievement.emoji}</span>
+                    <div class="achievement-badge-name">${achievement.name}</div>
+                `;
+                
+                achievementGrid.appendChild(badge);
+            });
+        }
+        
+        /**
+         * Visit Tracking Functions
+         */
+        function markAsVisited(businessId) {
+            const achievements = getAchievementData();
+            
+            if (!achievements.visitedBusinesses.includes(businessId)) {
+                // Add to visited businesses
+                achievements.visitedBusinesses.push(businessId);
+                
+                // Add bonus points to current game stats
+                const stats = JSON.parse(localStorage.getItem('statistics') || '{}');
+                stats.totalPoints = (stats.totalPoints || 0) + CONFIG.VISIT_BONUS;
+                localStorage.setItem('statistics', JSON.stringify(stats));
+                
+                // Save achievement data
+                saveAchievementData(achievements);
+                
+                // Check for visit-related achievements
+                const visitCount = achievements.visitedBusinesses.length;
+                const newAchievements = [];
+                
+                if (visitCount >= 1 && !achievements.unlocked.includes('adventurer')) {
+                    newAchievements.push('adventurer');
+                }
+                if (visitCount >= 5 && !achievements.unlocked.includes('foodie')) {
+                    newAchievements.push('foodie');
+                }
+                if (visitCount >= 15 && !achievements.unlocked.includes('local_legend')) {
+                    newAchievements.push('local_legend');
+                }
+                
+                if (newAchievements.length > 0) {
+                    achievements.unlocked = [...achievements.unlocked, ...newAchievements];
+                    saveAchievementData(achievements);
+                    showAchievementNotifications(newAchievements);
+                }
+                
+                // Update the UI to show visited status
+                updateVisitUI(businessId, true);
+                
+                // Show bonus notification
+                showVisitBonus();
+            }
+        }
+        
+        function addToWishlist(businessId) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            
+            if (!wishlist.includes(businessId)) {
+                wishlist.push(businessId);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                
+                // Show confirmation
+                const wishlistButton = document.querySelector('.wishlist-button');
+                const originalText = wishlistButton.innerHTML;
+                wishlistButton.innerHTML = '✅ Added to wishlist!';
+                wishlistButton.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    wishlistButton.innerHTML = originalText;
+                    wishlistButton.style.pointerEvents = 'auto';
+                }, 2000);
+            }
+        }
+        
+        function updateVisitUI(businessId, isVisited) {
+            const visitActions = document.querySelector('.visit-actions');
+            if (visitActions && isVisited) {
+                const visitButton = visitActions.querySelector('.visit-button');
+                const wishlistButton = visitActions.querySelector('.wishlist-button');
+                
+                if (visitButton) visitButton.remove();
+                if (wishlistButton) wishlistButton.remove();
+                
+                // Add visited badge
+                const visitedBadge = document.createElement('div');
+                visitedBadge.className = 'visited-badge';
+                visitedBadge.textContent = '✅ You\'ve been here!';
+                visitActions.insertBefore(visitedBadge, visitActions.firstChild);
+            }
+        }
+        
+        function showVisitBonus() {
+            const bonusPopup = document.createElement('div');
+            bonusPopup.className = 'achievement-popup visit-bonus';
+            bonusPopup.innerHTML = `
+                <div class="achievement-content">
+                    <div class="achievement-emoji">🎉</div>
+                    <div class="achievement-text">
+                        <div class="achievement-title">Bonus Points!</div>
+                        <div class="achievement-name">+${CONFIG.VISIT_BONUS} for visiting!</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(bonusPopup);
+            
+            // Animate in
+            setTimeout(() => {
+                bonusPopup.classList.add('show');
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                bonusPopup.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(bonusPopup)) {
+                        document.body.removeChild(bonusPopup);
+                    }
+                }, 500);
+            }, 3000);
+        }
+        
+        /**
+         * Discovery Content Generation
+         */
 
         function showStats() {
             displayStatistics();
-            document.getElementById('statsModal').classList.add('show');
+            domElements.statsModal.classList.add('show');
         }
 
         function closeStats() {
-            document.getElementById('statsModal').classList.remove('show');
+            domElements.statsModal.classList.remove('show');
         }
 
         function showDebug() {
             updateDebugInfo();
-            document.getElementById('debugModal').classList.add('show');
+            domElements.debugModal.classList.add('show');
         }
 
         function closeDebug() {
-            document.getElementById('debugModal').classList.remove('show');
+            domElements.debugModal.classList.remove('show');
         }
 
+        function showTutorial() {
+            domElements.tutorialModal.classList.add('show');
+        }
+
+        function closeTutorial() {
+            domElements.tutorialModal.classList.remove('show');
+            // Mark tutorial as seen
+            localStorage.setItem('tutorialSeen', 'true');
+        }
+
+        function showWhyBizzle() {
+            domElements.whyBizzleModal.classList.add('show');
+        }
+
+        function closeWhyBizzle() {
+            domElements.whyBizzleModal.classList.remove('show');
+        }
+
+        /**
+         * Karl the Fog Animation System
+         */
+        let karlAnimation = {
+            x: 100,
+            y: 100,
+            targetX: 100,
+            targetY: 100,
+            speed: 0.02,
+            changeDirection: 0,
+            enabled: true,
+            animationId: null,
+            directionInterval: null
+        };
+
+        function initializeKarl() {
+            if (!domElements.karlTheFog) return;
+
+            // Check if Karl is enabled from localStorage (default: true)
+            const karlEnabled = localStorage.getItem('karlEnabled');
+            karlAnimation.enabled = karlEnabled === null ? true : karlEnabled === 'true';
+            
+            updateKarlToggleUI();
+
+            if (karlAnimation.enabled) {
+                // Start Karl in a random position
+                karlAnimation.x = Math.random() * (window.innerWidth - 100);
+                karlAnimation.y = Math.random() * (window.innerHeight - 100);
+                
+                updateKarlPosition();
+                startKarlMovement();
+            } else {
+                hideKarl();
+            }
+        }
+
+        function startKarlMovement() {
+            if (!karlAnimation.enabled) return;
+
+            // Start movement animation
+            karlAnimation.animationId = setInterval(() => {
+                moveKarl();
+            }, 16); // ~60fps
+
+            // Change direction every 5-10 seconds
+            karlAnimation.directionInterval = setInterval(() => {
+                setNewKarlTarget();
+            }, 5000 + Math.random() * 5000);
+        }
+
+        function stopKarlMovement() {
+            if (karlAnimation.animationId) {
+                clearInterval(karlAnimation.animationId);
+                karlAnimation.animationId = null;
+            }
+            if (karlAnimation.directionInterval) {
+                clearInterval(karlAnimation.directionInterval);
+                karlAnimation.directionInterval = null;
+            }
+        }
+
+        function setNewKarlTarget() {
+            const margin = 100;
+            karlAnimation.targetX = margin + Math.random() * (window.innerWidth - margin * 2);
+            karlAnimation.targetY = margin + Math.random() * (window.innerHeight - margin * 2);
+        }
+
+        function moveKarl() {
+            // Smooth movement toward target
+            const dx = karlAnimation.targetX - karlAnimation.x;
+            const dy = karlAnimation.targetY - karlAnimation.y;
+            
+            karlAnimation.x += dx * karlAnimation.speed;
+            karlAnimation.y += dy * karlAnimation.speed;
+            
+            updateKarlPosition();
+        }
+
+        function updateKarlPosition() {
+            if (!domElements.karlTheFog) return;
+            
+            domElements.karlTheFog.style.left = karlAnimation.x + 'px';
+            domElements.karlTheFog.style.top = karlAnimation.y + 'px';
+        }
+
+        // Special Karl reactions to game events
+        function karlCelebrate() {
+            if (!domElements.karlTheFog || !karlAnimation.enabled) return;
+            
+            // Temporarily increase opacity and add celebration animation
+            domElements.karlTheFog.style.opacity = '0.6';
+            domElements.karlTheFog.style.animation = 'karl-drift 2s ease-in-out';
+            
+            // Reset after celebration
+            setTimeout(() => {
+                domElements.karlTheFog.style.opacity = '0.3';
+                domElements.karlTheFog.style.animation = '';
+            }, 2000);
+        }
+
+        // Karl toggle functionality
+        function toggleKarl() {
+            karlAnimation.enabled = !karlAnimation.enabled;
+            localStorage.setItem('karlEnabled', karlAnimation.enabled.toString());
+            
+            if (karlAnimation.enabled) {
+                showKarl();
+                startKarlMovement();
+            } else {
+                stopKarlMovement();
+                hideKarl();
+            }
+            
+            updateKarlToggleUI();
+        }
+
+        function showKarl() {
+            if (!domElements.karlTheFog) return;
+            domElements.karlTheFog.style.display = 'block';
+        }
+
+        function hideKarl() {
+            if (!domElements.karlTheFog) return;
+            domElements.karlTheFog.style.display = 'none';
+        }
+
+        function updateKarlToggleUI() {
+            if (!domElements.karlToggle) return;
+            
+            if (karlAnimation.enabled) {
+                domElements.karlToggle.classList.remove('karl-disabled');
+                domElements.karlToggle.title = 'Hide Karl the Fog';
+            } else {
+                domElements.karlToggle.classList.add('karl-disabled');
+                domElements.karlToggle.title = 'Show Karl the Fog';
+            }
+        }
+
+        // Update Karl position on window resize
+        window.addEventListener('resize', () => {
+            if (karlAnimation.targetX > window.innerWidth - 100) {
+                setNewKarlTarget();
+            }
+        });
+
         function updateDebugInfo() {
-            document.getElementById('debugDay').textContent = getDayNumber();
-            document.getElementById('debugGuesses').textContent = gameState.guesses.length;
+            domElements.debugDay.textContent = getDayNumber();
+            domElements.debugGuesses.textContent = gameState.guesses.length;
             
             let state = 'Active';
             if (gameState.won) state = 'Won';
             else if (gameState.lost) state = 'Lost';
-            document.getElementById('debugState').textContent = state;
+            domElements.debugState.textContent = state;
             
-            document.getElementById('debugBusiness').textContent = currentBusiness ? currentBusiness.Name : 'Not loaded';
+            domElements.debugBusiness.textContent = currentBusiness ? currentBusiness.Name : 'Not loaded';
         }
 
         function clearTodaysGame() {
@@ -1770,7 +2987,7 @@
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
                 
-                document.getElementById('countdownTime').textContent = 
+                domElements.countdownTime.textContent = 
                     `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
             
@@ -1863,14 +3080,13 @@
         }
 
         function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.classList.add('show');
+            domElements.errorMessage.textContent = message;
+            domElements.errorMessage.classList.add('show');
         }
 
         // Google Maps Integration with async loading support
         function initializeMap() {
-            const mapElement = document.getElementById('map');
+            const mapElement = domElements.map;
             if (!mapElement) {
                 console.warn('Map element not found');
                 return false;
@@ -1884,7 +3100,8 @@
             try {
                 map = new google.maps.Map(mapElement, {
                     zoom: 11,
-                    center: SF_CENTER,
+                    center: CONFIG.SF_CENTER,
+                    mapId: 'da06606e8454cb076fcdd76a', // Map ID for AdvancedMarkerElement support
                     disableDefaultUI: true,
                     zoomControl: true,
                     zoomControlOptions: {
@@ -1900,7 +3117,6 @@
                     ] // Hide POI labels to reduce clutter
                 });
                 
-                console.log('Google Maps initialized successfully');
                 return true;
             } catch (error) {
                 console.error('Error initializing Google Maps:', error);
@@ -1920,26 +3136,24 @@
                 return;
             }
             
-            const zoomLevels = {
-                1: { zoom: 11, center: SF_CENTER }, // City-wide view
-                2: { zoom: 13, center: coordinates }, // Region view
-                3: { zoom: 15, center: coordinates }, // Neighborhood view  
-                4: { zoom: 17, center: coordinates }, // Street view
-                5: { zoom: 19, center: coordinates }  // Exact location
+            const zoomConfig = CONFIG.ZOOM_LEVELS[level];
+            if (!zoomConfig) {
+                console.warn(`Invalid zoom level: ${level}`);
+                return;
+            }
+            
+            const config = {
+                zoom: zoomConfig.zoom,
+                center: level === 1 ? CONFIG.SF_CENTER : coordinates
             };
             
-            const config = zoomLevels[level];
-            if (config) {
-                console.log(`Zooming map to level ${level}, zoom: ${config.zoom}`);
-                
-                // Smooth zoom transition
-                map.panTo(config.center);
-                map.setZoom(config.zoom);
-                
-                // Add a subtle hint marker at max zoom (level 4) to show general area
-                if (level === 4 && !gameState.won && !gameState.lost) {
-                    addLocationHintMarker(coordinates);
-                }
+            // Smooth zoom transition
+            map.panTo(config.center);
+            map.setZoom(config.zoom);
+            
+            // Add a subtle hint marker at max zoom (level 4) to show general area
+            if (level === 4 && !gameState.won && !gameState.lost) {
+                addLocationHintMarker(coordinates);
             }
         }
 
@@ -1962,8 +3176,6 @@
                 center: coordinates,
                 radius: 50 // 50 meter radius hint circle
             });
-            
-            console.log('Added location hint circle');
         }
 
         function showFinalLocation() {
@@ -1972,15 +3184,13 @@
                 return;
             }
             
-            console.log('Showing final location with marker');
-            
             // Zoom to exact location
             updateMapZoom(5, gameState.correctCoordinates);
             
             // Add the business marker with animation after a short delay
             setTimeout(() => {
                 addBusinessMarker(true);
-            }, 800);
+            }, CONFIG.TIMEOUTS.MARKER_DROP);
         }
 
         function addBusinessMarker(withAnimation = true) {
@@ -1991,35 +3201,70 @@
             
             // Remove existing markers
             if (businessMarker) {
-                businessMarker.setMap(null);
+                // Check if it's an AdvancedMarkerElement
+                if (businessMarker.map) {
+                    businessMarker.map = null;
+                } else {
+                    // Fallback for old Marker
+                    businessMarker.setMap(null);
+                }
             }
             if (window.hintMarker) {
                 window.hintMarker.setMap(null);
                 window.hintMarker = null;
             }
             
-            console.log('Adding business marker at:', gameState.correctCoordinates);
-            
-            // Create custom pin icon - using a simple red marker
-            const pinIcon = {
-                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            // Try to use AdvancedMarkerElement if available (requires Map ID)
+            if (google.maps.marker && google.maps.marker.AdvancedMarkerElement) {
+                // Create custom pin element
+                const pinElement = document.createElement('div');
+                pinElement.innerHTML = `
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
                         <circle cx="16" cy="16" r="12" fill="#EF4444" stroke="white" stroke-width="3"/>
                         <circle cx="16" cy="16" r="6" fill="white"/>
                     </svg>
-                `),
-                scaledSize: new google.maps.Size(32, 32),
-                anchor: new google.maps.Point(16, 16)
-            };
-            
-            // Create the marker
-            businessMarker = new google.maps.Marker({
-                position: gameState.correctCoordinates,
-                map: map,
-                title: `${currentBusiness.Name}\n${currentBusiness.Address}`,
-                icon: pinIcon,
-                animation: withAnimation ? google.maps.Animation.DROP : null
-            });
+                `;
+                
+                // Create the advanced marker
+                businessMarker = new google.maps.marker.AdvancedMarkerElement({
+                    position: gameState.correctCoordinates,
+                    map: map,
+                    title: `${currentBusiness.Name}\n${currentBusiness.Address}`,
+                    content: pinElement,
+                    gmpDraggable: false
+                });
+                
+                // Add animation effect if requested
+                if (withAnimation) {
+                    pinElement.style.opacity = '0';
+                    pinElement.style.transform = 'translateY(-20px)';
+                    pinElement.style.transition = 'all 0.5s ease';
+                    setTimeout(() => {
+                        pinElement.style.opacity = '1';
+                        pinElement.style.transform = 'translateY(0)';
+                    }, 100);
+                }
+            } else {
+                // Fallback to regular Marker if AdvancedMarkerElement not available
+                const pinIcon = {
+                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="16" r="12" fill="#EF4444" stroke="white" stroke-width="3"/>
+                            <circle cx="16" cy="16" r="6" fill="white"/>
+                        </svg>
+                    `),
+                    scaledSize: new google.maps.Size(32, 32),
+                    anchor: new google.maps.Point(16, 16)
+                };
+                
+                businessMarker = new google.maps.Marker({
+                    position: gameState.correctCoordinates,
+                    map: map,
+                    title: `${currentBusiness.Name}\n${currentBusiness.Address}`,
+                    icon: pinIcon,
+                    animation: withAnimation ? google.maps.Animation.DROP : null
+                });
+            }
             
             // Add info window that opens on click
             const infoWindow = new google.maps.InfoWindow({
@@ -2033,24 +3278,29 @@
                 `
             });
             
-            // Open info window on marker click
-            businessMarker.addListener('click', () => {
-                infoWindow.open(map, businessMarker);
-            });
+            // Add click listener based on marker type
+            if (businessMarker.addListener) {
+                // Regular Marker
+                businessMarker.addListener('click', () => {
+                    infoWindow.open(map, businessMarker);
+                });
+            } else if (businessMarker.element) {
+                // AdvancedMarkerElement
+                businessMarker.element.addEventListener('click', () => {
+                    infoWindow.open(map, businessMarker);
+                });
+            }
             
             // Auto-open info window after marker drops (for final reveals)
             if (withAnimation) {
                 setTimeout(() => {
                     infoWindow.open(map, businessMarker);
-                }, 1000);
+                }, CONFIG.TIMEOUTS.INFO_WINDOW);
             }
-            
-            console.log('Business marker added successfully');
         }
 
         function showMap() {
-            const mapContainer = document.getElementById('mapContainer');
-            mapContainer.style.display = 'block';
+            domElements.mapContainer.style.display = 'block';
             
             // Initialize map if not already done and Google Maps is ready
             if (!map) {
@@ -2061,13 +3311,10 @@
                     }
                 } else {
                     // Wait for Google Maps to load
-                    console.log('Waiting for Google Maps to load...');
                     const checkInterval = setInterval(() => {
                         if (window.googleMapsReady && window.google?.maps) {
                             clearInterval(checkInterval);
-                            if (initializeMap()) {
-                                console.log('Map initialized after waiting');
-                            }
+                            initializeMap();
                         }
                     }, 100);
                     
@@ -2083,8 +3330,7 @@
         }
 
         function hideMap() {
-            const mapContainer = document.getElementById('mapContainer');
-            mapContainer.style.display = 'none';
+            domElements.mapContainer.style.display = 'none';
         }
 
         // Multiple Choice System with Places API
@@ -2127,7 +3373,9 @@
                 
                 // Use new Places API (New) with Text Search
                 const placeType = mapBusinessTypeToPlaceType(businessType);
+                console.log(`Business category: "${businessType}" mapped to: "${placeType}"`);
                 const searchQuery = `${placeType} near ${coordinates.lat},${coordinates.lng}`;
+                console.log(`Places API search query: "${searchQuery}"`);
                 
                 // Convert miles to meters for radius
                 const radiusMeters = Math.min(radiusMiles * 1609.34, 50000); // Max 50km radius
@@ -2152,37 +3400,85 @@
         }
 
         function mapBusinessTypeToPlaceType(businessType) {
-            // Map business categories to search terms for Text Search API
-            const typeMapping = {
-                'Bakery': 'bakery',
-                'Restaurant': 'restaurant', 
-                'Coffee': 'coffee shop',
-                'Bar': 'bar',
-                'Store': 'store',
-                'Shop': 'shop',
-                'Market': 'grocery store',
-                'Cafe': 'cafe',
-                'Pizza': 'pizza restaurant',
-                'Deli': 'deli',
-                'Donut': 'donut shop',
-                'Sandwich': 'sandwich shop',
-                'Mexican': 'mexican restaurant',
-                'Chinese': 'chinese restaurant',
-                'Italian': 'italian restaurant',
-                'Thai': 'thai restaurant'
-            };
-            
             if (!businessType) return 'restaurant';
             
-            // Try to find a specific match first
+            const lowerType = businessType.toLowerCase();
+            
+            // Smart cuisine detection for restaurants
+            // Common cuisine keywords that appear in business categories
+            const cuisinePatterns = [
+                'chinese', 'italian', 'mexican', 'thai', 'japanese', 'korean', 
+                'vietnamese', 'indian', 'french', 'spanish', 'greek', 'mediterranean',
+                'american', 'southern', 'bbq', 'barbecue', 'sushi', 'ramen', 'pho',
+                'taco', 'burrito', 'pizza', 'pasta', 'dim sum', 'tapas', 'ethiopian',
+                'peruvian', 'brazilian', 'argentinian', 'german', 'irish', 'british',
+                'middle eastern', 'lebanese', 'turkish', 'moroccan', 'caribbean',
+                'cuban', 'salvadoran', 'guatemalan', 'filipino', 'indonesian',
+                'malaysian', 'singaporean', 'burmese', 'nepalese', 'afghan',
+                'pakistani', 'bangladeshi', 'sri lankan', 'russian', 'polish',
+                'hungarian', 'czech', 'scandinavian', 'swedish', 'norwegian'
+            ];
+            
+            // First, check if the category IS a cuisine name directly
+            for (const cuisine of cuisinePatterns) {
+                if (lowerType === cuisine || lowerType === `${cuisine} food` || lowerType === `${cuisine} cuisine`) {
+                    console.log(`Direct cuisine match: "${businessType}" -> "${cuisine} restaurant"`);
+                    return `${cuisine} restaurant`;
+                }
+            }
+            
+            // Check if it's a restaurant with a specific cuisine
+            if (lowerType.includes('restaurant') || lowerType.includes('food') || 
+                lowerType.includes('kitchen') || lowerType.includes('bistro') ||
+                lowerType.includes('grill') || lowerType.includes('eatery')) {
+                
+                // Try to find a cuisine modifier
+                for (const cuisine of cuisinePatterns) {
+                    if (lowerType.includes(cuisine)) {
+                        return `${cuisine} restaurant`;
+                    }
+                }
+                
+                // No specific cuisine found, return generic restaurant
+                return 'restaurant';
+            }
+            
+            // Non-restaurant specific mappings
+            const typeMapping = {
+                'bakery': 'bakery',
+                'coffee': 'coffee shop',
+                'bar': 'bar',
+                'pub': 'bar',
+                'brewery': 'brewery',
+                'wine': 'wine bar',
+                'cocktail': 'cocktail bar',
+                'store': 'store',
+                'shop': 'shop',
+                'market': 'grocery store',
+                'cafe': 'cafe',
+                'deli': 'deli',
+                'donut': 'donut shop',
+                'sandwich': 'sandwich shop',
+                'burger': 'burger restaurant',
+                'seafood': 'seafood restaurant',
+                'steakhouse': 'steakhouse',
+                'vegetarian': 'vegetarian restaurant',
+                'vegan': 'vegan restaurant',
+                'dessert': 'dessert shop',
+                'ice cream': 'ice cream shop',
+                'juice': 'juice bar',
+                'smoothie': 'smoothie shop',
+                'tea': 'tea house'
+            };
+            
+            // Try to find a specific match
             for (const [key, value] of Object.entries(typeMapping)) {
-                if (businessType.toLowerCase().includes(key.toLowerCase())) {
+                if (lowerType.includes(key)) {
                     return value;
                 }
             }
             
-            // Fallback based on common patterns
-            const lowerType = businessType.toLowerCase();
+            // Final fallback based on common patterns
             if (lowerType.includes('food') || lowerType.includes('eat')) {
                 return 'restaurant';
             } else if (lowerType.includes('drink') || lowerType.includes('beverage')) {
@@ -2207,6 +3503,33 @@
                     'Philz Coffee', 'The Mill', 'Four Barrel Coffee',
                     'Saint Frank Coffee', 'Wrecking Ball Coffee'
                 ],
+                // Cuisine-specific restaurant fallbacks
+                'chinese restaurant': [
+                    'Z & Y Bistro', 'House of Nanking', 'R&G Lounge', 'Hunan Home\'s',
+                    'Beijing Restaurant', 'Great Eastern', 'Yank Sing', 'Good Luck Dim Sum',
+                    'Dragon Well', 'Eric\'s Restaurant', 'San Tung', 'Kingdom of Dumpling'
+                ],
+                'italian restaurant': [
+                    'Tony\'s Pizza Napoletana', 'Cotogna', 'A16', 'Delfina',
+                    'Flour + Water', 'Il Pollaio', 'The Italian Homemade Company',
+                    'North Beach Restaurant', 'Original Joe\'s', 'Che Fico'
+                ],
+                'mexican restaurant': [
+                    'La Taqueria', 'El Farolito', 'Papalote', 'Nopalito',
+                    'Tropisueño', 'Gallardo\'s', 'Los Hermanos', 'Taqueria Cancun',
+                    'El Castillito', 'La Corneta', 'Pancho Villa', 'Gracias Madre'
+                ],
+                'japanese restaurant': [
+                    'Ju-ni', 'Omakase', 'Wako', 'Ozumo', 'Sanraku',
+                    'Katana-Ya', 'Marufuku Ramen', 'Hinodeya', 'Akiko\'s',
+                    'Tekka', 'Shizen', 'Okoze Sushi'
+                ],
+                'thai restaurant': [
+                    'Kin Khao', 'Farmhouse Kitchen', 'Marnee Thai', 'Basil Thai',
+                    'Osha Thai', 'Lers Ros', 'Derm Restaurant', 'Zen Yai',
+                    'Thai Time', 'Chaiya Thai', 'Sweet Basil Thai'
+                ],
+                // Generic restaurants for when no cuisine is specified
                 restaurant: [
                     'Zuni Cafe', 'State Bird Provisions', 'Gary Danko',
                     'House of Prime Rib', 'Swan Oyster Depot', 'Tadich Grill',
@@ -2231,11 +3554,59 @@
             };
             
             // Get appropriate category options
-            let options = sfBusinesses[placeType] || sfBusinesses.restaurant;
+            let options = sfBusinesses[placeType];
             
-            // Add some cross-category variety for realism
-            if (placeType !== 'restaurant') {
-                options = [...options, ...sfBusinesses.restaurant.slice(0, 2)];
+            // If no exact match found, but it's a specific cuisine restaurant
+            if (!options && placeType.includes('restaurant')) {
+                // Extract the cuisine from the placeType (e.g., "chinese restaurant" -> "chinese")
+                const cuisine = placeType.replace(' restaurant', '').trim();
+                
+                // For cuisines we don't have specific lists for, try to use the most relevant fallback
+                // Check if we have any cuisine-specific lists
+                const availableCuisines = Object.keys(sfBusinesses).filter(key => key.includes('restaurant') && key !== 'restaurant');
+                
+                console.log(`No specific fallback for "${placeType}". Available cuisines: ${availableCuisines.join(', ')}`);
+                
+                // If it's an Asian cuisine, try to use another Asian cuisine as fallback
+                const asianCuisines = ['chinese', 'japanese', 'thai', 'vietnamese', 'korean'];
+                if (asianCuisines.some(c => cuisine.includes(c))) {
+                    // Try to find another Asian cuisine we have
+                    for (const asian of ['chinese restaurant', 'japanese restaurant', 'thai restaurant']) {
+                        if (sfBusinesses[asian] && asian !== placeType) {
+                            console.log(`Using ${asian} as fallback for ${placeType}`);
+                            options = sfBusinesses[asian];
+                            break;
+                        }
+                    }
+                }
+                
+                // If it's a Latin cuisine, use another Latin cuisine
+                const latinCuisines = ['mexican', 'cuban', 'peruvian', 'salvadoran'];
+                if (!options && latinCuisines.some(c => cuisine.includes(c))) {
+                    if (sfBusinesses['mexican restaurant']) {
+                        console.log(`Using mexican restaurant as fallback for ${placeType}`);
+                        options = sfBusinesses['mexican restaurant'];
+                    }
+                }
+                
+                // Still no match? Use generic restaurants but log a warning
+                if (!options) {
+                    console.warn(`WARNING: Using generic restaurants for ${placeType} - this will show wrong cuisine types!`);
+                    options = sfBusinesses.restaurant;
+                }
+            } else if (!options) {
+                // Final fallback for non-restaurant categories
+                console.log(`No fallback for category "${placeType}", using generic restaurants`);
+                options = sfBusinesses.restaurant;
+            }
+            
+            // Don't mix cuisines - if it's a specific cuisine, keep it pure
+            // Only add variety for non-cuisine-specific categories
+            if (placeType === 'restaurant' || !placeType.includes('restaurant')) {
+                // For generic restaurants or non-restaurants, add some variety
+                if (placeType !== 'restaurant' && sfBusinesses.restaurant) {
+                    options = [...options, ...sfBusinesses.restaurant.slice(0, 2)];
+                }
             }
             
             // Simulate distance-based filtering (closer = more specific)
@@ -2256,10 +3627,15 @@
         }
 
         function generateFallbackOptions() {
-            // Simple fallback when no coordinates are available
+            // Use actual business coordinates if available, otherwise SF center
+            const coords = gameState.correctCoordinates || CONFIG.SF_CENTER;
+            const mappedType = mapBusinessTypeToPlaceType(currentBusiness.Category);
+            
+            console.log(`Fallback: Category "${currentBusiness.Category}" mapped to "${mappedType}"`);
+            
             return generateLocationAwareFallback(
-                mapBusinessTypeToPlaceType(currentBusiness.Category),
-                SF_CENTER,
+                mappedType,
+                coords,
                 10
             ).map(place => place.name);
         }
@@ -2274,8 +3650,8 @@
         }
 
         function showMultipleChoice(options) {
-            const container = document.getElementById('multipleChoiceContainer');
-            const grid = document.getElementById('choiceGrid');
+            const container = domElements.multipleChoiceContainer;
+            const grid = domElements.choiceGrid;
             
             // Clear existing options
             grid.innerHTML = '';
@@ -2293,19 +3669,65 @@
         }
 
         function hideMultipleChoice() {
-            const container = document.getElementById('multipleChoiceContainer');
-            container.style.display = 'none';
+            domElements.multipleChoiceContainer.style.display = 'none';
         }
 
-        function handleMultipleChoiceGuess(guess, buttonElement) {
-            const isCorrect = guess === currentBusiness.Name;
-            
-            // Visual feedback
+        /**
+         * Provide visual feedback for multiple choice guess
+         */
+        function applyGuessVisualFeedback(buttonElement, isCorrect) {
             buttonElement.classList.add(isCorrect ? 'correct' : 'wrong');
             
             // Disable all buttons
             const allButtons = document.querySelectorAll('.choice-button');
             allButtons.forEach(btn => btn.style.pointerEvents = 'none');
+        }
+        
+        /**
+         * Handle correct guess in multiple choice mode
+         */
+        function handleCorrectMultipleChoice() {
+            gameState.won = true;
+            gameState.pointsEarned = calculatePoints(gameState.guesses.length);
+            karlCelebrate(); // Karl celebrates the win!
+            
+            // Immediately add marker when they get it right
+            addBusinessMarker(true);
+            
+            // Zoom to exact location if not already there
+            if (gameState.round < 4) {
+                updateMapZoom(5, gameState.correctCoordinates);
+            }
+            
+            // Show winning message after celebration
+            setTimeout(() => {
+                endGame(true);
+            }, CONFIG.TIMEOUTS.WIN_CELEBRATION);
+        }
+        
+        /**
+         * Handle wrong guess in multiple choice mode
+         */
+        function handleWrongMultipleChoice() {
+            if (gameState.round >= 4) {
+                // Out of rounds - show final location
+                gameState.lost = true;
+                showFinalLocation();
+                setTimeout(() => {
+                    endGame(false);
+                }, CONFIG.TIMEOUTS.LOSE_REVEAL);
+            } else {
+                // Progress to next round
+                gameState.round++;
+                progressToNextRound();
+            }
+        }
+        
+        function handleMultipleChoiceGuess(guess, buttonElement) {
+            const isCorrect = guess === currentBusiness.Name;
+            
+            // Apply visual feedback
+            applyGuessVisualFeedback(buttonElement, isCorrect);
             
             // Add to game state
             gameState.guesses.push({
@@ -2313,38 +3735,22 @@
                 correct: isCorrect
             });
             
+            // Handle outcome after visual feedback delay
             setTimeout(() => {
                 if (isCorrect) {
-                    gameState.won = true;
-                    gameState.pointsEarned = calculatePoints(gameState.guesses.length);
-                    // Immediately add marker when they get it right
-                    addBusinessMarker(true);
-                    // Also zoom to exact location if not already there
-                    if (gameState.round < 4) {
-                        updateMapZoom(5, gameState.correctCoordinates);
-                    }
-                    // Show winning message after a brief moment to see the marker
-                    setTimeout(() => {
-                        endGame(true);
-                    }, 1500);
-                } else if (gameState.round >= 4) {
-                    // Out of rounds - show final location
-                    gameState.lost = true;
-                    showFinalLocation();
-                    setTimeout(() => {
-                        endGame(false);
-                    }, 1000);
+                    handleCorrectMultipleChoice();
                 } else {
-                    // Progress to next round with zoom
-                    gameState.round++;
-                    progressToNextRound();
+                    handleWrongMultipleChoice();
                 }
                 saveGameState();
-            }, 1500);
+            }, CONFIG.TIMEOUTS.CHOICE_FEEDBACK);
         }
 
         async function init() {
             try {
+                // Initialize DOM element cache first
+                initializeDOMCache();
+                
                 allBusinesses = await fetchBusinessData();
                 
                 if (allBusinesses.length === 0) {
@@ -2357,8 +3763,8 @@
                     throw new Error('Could not load today\'s business');
                 }
                 
-                document.getElementById('businessPhoto').src = currentBusiness.PhotoURL;
-                document.getElementById('funFact').textContent = currentBusiness.FunFact;
+                domElements.businessPhoto.src = currentBusiness.PhotoURL;
+                domElements.funFact.textContent = currentBusiness.FunFact;
                 // Note: hint content is now populated dynamically via revealHint() function
                 
                 // Pre-load coordinates for better performance
@@ -2370,10 +3776,22 @@
                     });
                 }
                 
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('gameContent').style.display = 'block';
+                domElements.loading.style.display = 'none';
+                domElements.gameContent.style.display = 'block';
                 
                 initializeGame();
+
+                // Show tutorial for first-time users
+                const tutorialSeen = localStorage.getItem('tutorialSeen');
+                if (!tutorialSeen) {
+                    // Delay slightly to ensure DOM is fully rendered
+                    setTimeout(() => {
+                        showTutorial();
+                    }, 500);
+                }
+
+                // Initialize Karl the Fog
+                initializeKarl();
                 setupAutocomplete();
                 
                 // Restore UI state after business is loaded
@@ -2381,7 +3799,7 @@
                     restoreGameUI();
                 }
                 
-                document.getElementById('guessInput').addEventListener('keypress', (e) => {
+                domElements.guessInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter' && selectedAutocompleteIndex === -1) {
                         e.preventDefault();
                         submitGuess();
@@ -2390,11 +3808,13 @@
                 
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
-                        const statsModal = document.getElementById('statsModal');
-                        const debugModal = document.getElementById('debugModal');
-                        if (statsModal.classList.contains('show')) {
+                        if (domElements.tutorialModal.classList.contains('show')) {
+                            closeTutorial();
+                        } else if (domElements.whyBizzleModal.classList.contains('show')) {
+                            closeWhyBizzle();
+                        } else if (domElements.statsModal.classList.contains('show')) {
                             closeStats();
-                        } else if (debugModal.classList.contains('show')) {
+                        } else if (domElements.debugModal.classList.contains('show')) {
                             closeDebug();
                         }
                     }
@@ -2402,7 +3822,7 @@
                 
             } catch (error) {
                 console.error('Initialization error:', error);
-                document.getElementById('loading').style.display = 'none';
+                domElements.loading.style.display = 'none';
                 showError('Failed to initialize game. Please refresh the page.');
             }
         }
