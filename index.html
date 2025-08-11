@@ -1503,6 +1503,13 @@
                     <button class="debug-btn" onclick="testPlacesAPI()">Test Places API</button>
                 </div>
                 <div class="debug-section">
+                    <h3>Date Testing</h3>
+                    <label for="debugDatePicker" style="display: block; margin-bottom: 8px; color: #a6adc8; font-size: 12px;">Select Date to Test:</label>
+                    <input type="date" id="debugDatePicker" style="margin-bottom: 12px; padding: 6px; border: 1px solid #585b70; background: #45475a; color: #cdd6f4; border-radius: 4px; font-size: 12px;">
+                    <button class="debug-btn" onclick="loadDateForTesting()">Load Selected Date</button>
+                    <button class="debug-btn" onclick="resetToToday()">Reset to Today</button>
+                </div>
+                <div class="debug-section">
                     <h3>Game Info</h3>
                     <p><strong>Day:</strong> <span id="debugDay"></span></p>
                     <p><strong>Guesses:</strong> <span id="debugGuesses"></span></p>
@@ -1863,22 +1870,28 @@
         }
 
         function getTodaysBusiness(businesses) {
-            const today = new Date().toISOString().split('T')[0];
+            // Check for debug date override
+            const debugDate = localStorage.getItem('debugDate');
+            const targetDate = debugDate || new Date().toISOString().split('T')[0];
             
-            const scheduledBusiness = businesses.find(b => b.DateToFeature === today);
+            // First, check if there's a scheduled business for this specific date
+            const scheduledBusiness = businesses.find(b => b.DateToFeature === targetDate);
             if (scheduledBusiness) {
                 return scheduledBusiness;
             }
             
-            const daysSinceEpoch = Math.floor((new Date() - new Date(CONFIG.GAME_START_DATE)) / (1000 * 60 * 60 * 24));
+            // Otherwise, calculate based on days since epoch (use debug date if available)
+            const referenceDate = debugDate ? new Date(debugDate) : new Date();
+            const daysSinceEpoch = Math.floor((referenceDate - new Date(CONFIG.GAME_START_DATE)) / (1000 * 60 * 60 * 24));
             const index = daysSinceEpoch % businesses.length;
             return businesses[index];
         }
 
         function getDayNumber() {
             const startDate = new Date(CONFIG.GAME_START_DATE);
-            const today = new Date();
-            const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            const debugDate = localStorage.getItem('debugDate');
+            const referenceDate = debugDate ? new Date(debugDate) : new Date();
+            const daysDiff = Math.floor((referenceDate - startDate) / (1000 * 60 * 60 * 24));
             return Math.max(1, daysDiff + 1);
         }
 
@@ -2914,6 +2927,16 @@
 
         function showDebug() {
             updateDebugInfo();
+            
+            // Initialize date picker with current debug date or today
+            const dateInput = document.getElementById('debugDatePicker');
+            const debugDate = localStorage.getItem('debugDate');
+            if (debugDate) {
+                dateInput.value = debugDate;
+            } else {
+                dateInput.value = new Date().toISOString().split('T')[0];
+            }
+            
             domElements.debugModal.classList.add('show');
         }
 
@@ -3085,7 +3108,16 @@
         });
 
         function updateDebugInfo() {
-            domElements.debugDay.textContent = getDayNumber();
+            const debugDate = localStorage.getItem('debugDate');
+            const dayNumber = getDayNumber();
+            
+            // Show debug date indicator if active
+            if (debugDate) {
+                domElements.debugDay.textContent = `${dayNumber} 🧪 (${debugDate})`;
+            } else {
+                domElements.debugDay.textContent = dayNumber;
+            }
+            
             domElements.debugGuesses.textContent = gameState.guesses.length;
             
             let state = 'Active';
@@ -3127,6 +3159,35 @@
                     alert('All data cleared!');
                     location.reload();
                 }
+            }
+        }
+
+        function loadDateForTesting() {
+            const dateInput = document.getElementById('debugDatePicker');
+            const selectedDate = dateInput.value;
+            
+            if (!selectedDate) {
+                alert('Please select a date first!');
+                return;
+            }
+            
+            // Store the debug date in localStorage
+            localStorage.setItem('debugDate', selectedDate);
+            
+            // Clear current game state to force reload with new date
+            localStorage.removeItem('gameState');
+            localStorage.removeItem('lastPlayed');
+            
+            alert(`Loading business for ${selectedDate}...`);
+            location.reload();
+        }
+
+        function resetToToday() {
+            if (confirm('Reset to today\'s business and clear debug date override?')) {
+                localStorage.removeItem('debugDate');
+                localStorage.removeItem('gameState');
+                localStorage.removeItem('lastPlayed');
+                location.reload();
             }
         }
 
