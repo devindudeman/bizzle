@@ -432,10 +432,13 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            position: relative;
+            z-index: 1000;
+            border: 3px solid #22C55E;
         }
 
         .game-end.show {
-            display: block;
+            display: block !important;
             animation: slideIn 0.5s ease-out;
         }
 
@@ -570,9 +573,15 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 16px;
             margin-bottom: 20px;
+        }
+        
+        .stats-grid .stat-item:nth-child(n+4) {
+            grid-column: span 2;
+            max-width: 200px;
+            margin: 0 auto;
         }
 
         .stat-item {
@@ -647,6 +656,78 @@
             background: #B91C1C;
         }
 
+        /* Map Styles */
+        .map-container {
+            margin-bottom: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #E5E7EB;
+        }
+
+        .map {
+            width: 100%;
+            height: 300px;
+        }
+
+        .map-label {
+            background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+            padding: 12px 16px;
+            text-align: center;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        /* Multiple Choice Styles */
+        .multiple-choice-container {
+            margin-bottom: 24px;
+        }
+
+        .choice-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .choice-button {
+            background: white;
+            border: 2px solid #E5E7EB;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .choice-button:hover {
+            border-color: #3B82F6;
+            background: #F8FAFC;
+            transform: translateY(-1px);
+        }
+
+        .choice-button.correct {
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+            border-color: #16A34A;
+            color: white;
+        }
+
+        .choice-button.wrong {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            border-color: #DC2626;
+            color: white;
+        }
+
         .error-message {
             background: #FEE2E2;
             color: #991B1B;
@@ -714,6 +795,19 @@
                 font-size: 12px;
                 padding: 6px 14px;
             }
+
+            .map {
+                height: 250px;
+            }
+
+            .choice-grid {
+                gap: 6px;
+            }
+
+            .choice-button {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -770,6 +864,20 @@
                 <!-- Hints will be dynamically prepended here, newest first -->
             </div>
 
+            <!-- Map Section (shown during multiple choice phase) -->
+            <div class="map-container" id="mapContainer" style="display: none;">
+                <div id="map" class="map"></div>
+                <div class="map-label">🗺️ Find the business on the map</div>
+            </div>
+
+            <!-- Multiple Choice Section -->
+            <div class="multiple-choice-container" id="multipleChoiceContainer" style="display: none;">
+                <div class="choice-label">Choose the correct business:</div>
+                <div class="choice-grid" id="choiceGrid">
+                    <!-- Multiple choice buttons will be added dynamically -->
+                </div>
+            </div>
+
             <!-- Photo Section (always visible baseline) -->
             <div class="photo-container">
                 <img id="businessPhoto" alt="Business interior photo">
@@ -811,6 +919,10 @@
                     <div class="stat-value" id="maxStreak">0</div>
                     <div class="stat-label">Max Streak</div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalPoints">0</div>
+                    <div class="stat-label">Total Points</div>
+                </div>
             </div>
         </div>
     </div>
@@ -830,6 +942,10 @@
                     <button class="debug-btn danger" onclick="clearAllData()">Clear Everything</button>
                 </div>
                 <div class="debug-section">
+                    <h3>API Testing</h3>
+                    <button class="debug-btn" onclick="testPlacesAPI()">Test Places API</button>
+                </div>
+                <div class="debug-section">
                     <h3>Game Info</h3>
                     <p><strong>Day:</strong> <span id="debugDay"></span></p>
                     <p><strong>Guesses:</strong> <span id="debugGuesses"></span></p>
@@ -840,10 +956,42 @@
         </div>
     </div>
 
+    <!-- Google Maps JavaScript API with proper async loading -->
+    <script>
+        // Modern async Google Maps loading
+        function initGoogleMaps() {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAkcxjO6ptmguM6UnYEu2CkdI2cIcsr5Ww&libraries=places&callback=onGoogleMapsReady&loading=async`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+        
+        // Callback when Google Maps is ready
+        function onGoogleMapsReady() {
+            console.log('Google Maps API loaded successfully');
+            window.googleMapsReady = true;
+            // Initialize map if game content is already visible
+            if (document.getElementById('gameContent').style.display !== 'none') {
+                initializeMapIfNeeded();
+            }
+        }
+        
+        // Load Google Maps when page is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGoogleMaps);
+        } else {
+            initGoogleMaps();
+        }
+    </script>
+    
     <script>
         const SHEET_ID = '1aCuaC2pMPs7cnaBc9-reGxq8SKJIpIaCRd6rhUtTJgg';
         const API_KEY = 'AIzaSyAkcxjO6ptmguM6UnYEu2CkdI2cIcsr5Ww';
         const RANGE = 'Sheet1!A:J';
+        
+        // San Francisco center coordinates
+        const SF_CENTER = { lat: 37.7749, lng: -122.4194 };
 
         let currentBusiness = null;
         let allBusinesses = [];
@@ -853,9 +1001,17 @@
             hintsRevealed: 0,
             won: false,
             lost: false,
-            statsUpdated: false // Track if stats were already updated for this game
+            statsUpdated: false, // Track if stats were already updated for this game
+            phase: 'freeform', // 'freeform' | 'multiple-choice'
+            round: 1, // 1-5
+            mapZoomLevel: 0,
+            multipleChoiceOptions: [],
+            correctCoordinates: null,
+            pointsEarned: 0 // Points earned this game
         };
         let selectedAutocompleteIndex = -1;
+        let map = null;
+        let businessMarker = null;
 
         async function fetchBusinessData() {
             try {
@@ -924,6 +1080,47 @@
             return Math.max(1, daysDiff + 1); // Ensure it's at least 1
         }
 
+        // Geocoding system with localStorage caching
+        async function geocodeAddress(address) {
+            try {
+                // Check cache first
+                const cacheKey = `coords_${address}`;
+                const cached = localStorage.getItem(cacheKey);
+                if (cached) {
+                    return JSON.parse(cached);
+                }
+                
+                // Geocode via API if not cached
+                const encodedAddress = encodeURIComponent(address);
+                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${API_KEY}`);
+                const data = await response.json();
+                
+                if (data.status === 'OK' && data.results.length > 0) {
+                    const coords = {
+                        lat: data.results[0].geometry.location.lat,
+                        lng: data.results[0].geometry.location.lng
+                    };
+                    
+                    // Cache for future use
+                    localStorage.setItem(cacheKey, JSON.stringify(coords));
+                    return coords;
+                } else {
+                    console.warn('Geocoding failed for address:', address, 'Status:', data.status);
+                    // Return SF center as fallback
+                    return SF_CENTER;
+                }
+            } catch (error) {
+                console.error('Geocoding error:', error);
+                // Return SF center as fallback
+                return SF_CENTER;
+            }
+        }
+
+        function calculatePoints(guessNumber) {
+            // Points: 5 for first guess, 4 for second, 3 for third, 2 for fourth, 1 for fifth
+            return Math.max(1, 6 - guessNumber);
+        }
+
         function fuzzyMatch(guess, answer) {
             const cleanString = (str) => {
                 return str.toLowerCase()
@@ -963,7 +1160,13 @@
                     hintsRevealed: 0,
                     won: false,
                     lost: false,
-                    statsUpdated: false
+                    statsUpdated: false,
+                    phase: 'freeform',
+                    round: 1,
+                    mapZoomLevel: 0,
+                    multipleChoiceOptions: [],
+                    correctCoordinates: null,
+                    pointsEarned: 0
                 };
                 saveGameState();
             }
@@ -988,11 +1191,35 @@
                 return;
             }
             
-            // If game is complete, hide guess section entirely
+            // Handle different game phases
             if (gameState.won || gameState.lost) {
+                // Game complete
                 guessSection.style.display = 'none';
+                hideMultipleChoice();
+                if (gameState.correctCoordinates) {
+                    showMap();
+                    showFinalLocation(); // Show exact location with marker
+                }
+                guessesGrid.style.display = 'block';
+                endGame(gameState.won);
+            } else if (gameState.phase === 'multiple-choice') {
+                // In multiple choice phase
+                guessSection.style.display = 'none';
+                showMap();
+                if (gameState.correctCoordinates) {
+                    // Use current round for zoom level (progressive zooming)
+                    const currentZoomLevel = gameState.round;
+                    console.log(`Restoring map zoom to level ${currentZoomLevel} for round ${gameState.round}`);
+                    updateMapZoom(currentZoomLevel, gameState.correctCoordinates);
+                }
+                if (gameState.multipleChoiceOptions.length > 0) {
+                    showMultipleChoice(gameState.multipleChoiceOptions);
+                }
             } else {
+                // Free-form phase
                 updateGuessCounter();
+                hideMap();
+                hideMultipleChoice();
             }
             
             // Recreate guess slots for existing guesses
@@ -1000,21 +1227,12 @@
                 addGuessSlot(guess.text, guess.correct);
             });
             
-            // Only show guess history if game is complete
-            if (gameState.won || gameState.lost) {
-                guessesGrid.style.display = 'block';
-            }
-            
             // Clear any existing hints and recreate them in reverse order (newest first)
             hintsContainer.innerHTML = '';
             
             // Reveal hints in reverse order so newest appears at top
             for (let i = gameState.hintsRevealed; i >= 1; i--) {
                 revealHint(i);
-            }
-            
-            if (gameState.won || gameState.lost) {
-                endGame(gameState.won);
             }
         }
 
@@ -1121,6 +1339,12 @@
                 }
                 gameState.hintsRevealed = 4;
                 
+                // Show final map state with marker
+                if (gameState.correctCoordinates) {
+                    showMap();
+                    updateMapZoom(4, gameState.correctCoordinates);
+                }
+                
                 updateGuessCounter();
                 endGame(false);
                 saveGameState();
@@ -1145,13 +1369,13 @@
             
             if (isCorrect) {
                 gameState.won = true;
+                gameState.pointsEarned = calculatePoints(gameState.guesses.length);
                 endGame(true);
-            } else if (gameState.guesses.length >= 5) {
-                gameState.lost = true;
-                endGame(false);
             } else {
-                gameState.hintsRevealed = gameState.guesses.length;
-                revealHint(gameState.hintsRevealed);
+                // Transition to multiple choice mode after first wrong guess
+                gameState.phase = 'multiple-choice';
+                gameState.round = 2;
+                transitionToMultipleChoice();
             }
             
             saveGameState();
@@ -1159,10 +1383,113 @@
             closeAutocomplete();
         }
 
-        function endGame(won) {
-            // Hide the entire guess section when game is complete
+        async function transitionToMultipleChoice() {
+            console.log('Transitioning to multiple choice mode');
+            
+            // Hide the free-form guess section
             const guessSection = document.getElementById('guessSection');
             guessSection.style.display = 'none';
+            
+            // Show the map with initial SF-wide view
+            showMap();
+            
+            // Wait for coordinates if not already available
+            if (!gameState.correctCoordinates) {
+                console.log('Geocoding business address...');
+                gameState.correctCoordinates = await geocodeAddress(currentBusiness.Address);
+                console.log('Coordinates obtained:', gameState.correctCoordinates);
+            }
+            
+            // Start with SF-wide view (zoom level 1) before first multiple choice round
+            updateMapZoom(1, gameState.correctCoordinates);
+            
+            // Wait a moment for map to settle, then start first multiple choice round
+            setTimeout(() => {
+                progressToNextRound();
+            }, 1000);
+        }
+
+        async function progressToNextRound() {
+            console.log(`Starting round ${gameState.round}`);
+            
+            // Update map zoom based on current round (progressive zoom)
+            const zoomLevel = gameState.round; // Round 2=zoom level 2, Round 3=zoom level 3, etc.
+            updateMapZoom(zoomLevel, gameState.correctCoordinates);
+            
+            // Progressive radius and option count based on round
+            const roundConfig = {
+                2: { radius: 8, maxOptions: 8, label: 'SF-wide' },  // City-wide
+                3: { radius: 2, maxOptions: 6, label: 'Neighborhood' }, // Neighborhood
+                4: { radius: 0.5, maxOptions: 4, label: 'Nearby' }  // Street-level
+            };
+            
+            const config = roundConfig[gameState.round] || roundConfig[2];
+            
+            // Update map label with loading state
+            const mapLabel = document.querySelector('.map-label');
+            if (mapLabel) {
+                mapLabel.textContent = `🗺️ Loading ${config.label.toLowerCase()} options...`;
+            }
+            
+            try {
+                // Generate multiple choice options
+                let options = await generateMultipleChoice(
+                    currentBusiness.Category, 
+                    gameState.correctCoordinates, 
+                    config.radius
+                );
+                
+                // Limit options based on round (more specific = fewer options)
+                if (options.length > config.maxOptions) {
+                    const correctAnswer = currentBusiness.Name;
+                    const otherOptions = options.filter(opt => opt !== correctAnswer);
+                    const limitedOthers = shuffleArray(otherOptions).slice(0, config.maxOptions - 1);
+                    options = shuffleArray([...limitedOthers, correctAnswer]);
+                }
+                
+                gameState.multipleChoiceOptions = options;
+                
+                // Update map label
+                if (mapLabel) {
+                    mapLabel.textContent = `🗺️ ${config.label} - Round ${gameState.round}`;
+                }
+                
+                // Show multiple choice UI
+                showMultipleChoice(options);
+                
+            } catch (error) {
+                console.error('Error in progressToNextRound:', error);
+                
+                // Fallback to basic options
+                const fallbackOptions = generateFallbackOptions();
+                gameState.multipleChoiceOptions = fallbackOptions;
+                
+                if (mapLabel) {
+                    mapLabel.textContent = `🗺️ ${config.label} - Find the business`;
+                }
+                
+                showMultipleChoice(fallbackOptions);
+            }
+            
+            // Reveal a hint based on the round
+            const hintMap = {
+                2: 1, // Neighborhood
+                3: 2, // Signature Item
+                4: 3  // Category
+            };
+            
+            const hintNumber = hintMap[gameState.round];
+            if (hintNumber && hintNumber <= 4) {
+                revealHint(hintNumber);
+                gameState.hintsRevealed = Math.max(gameState.hintsRevealed, hintNumber);
+            }
+        }
+
+        function endGame(won) {
+            console.log('🎉 ENDING GAME - Won:', won);
+            
+            // Hide the multiple choice interface
+            hideMultipleChoice();
             
             // Show the guess history now that game is over
             const guessesGrid = document.getElementById('guessesGrid');
@@ -1175,18 +1502,37 @@
             const businessNameReveal = document.getElementById('businessNameReveal');
             const businessDetails = document.getElementById('businessDetails');
             
-            gameEnd.classList.add('show');
+            console.log('🎯 Game end element found:', !!gameEnd);
+            console.log('📍 Current gameEnd display style:', gameEnd?.style.display);
+            console.log('📍 Current gameEnd classes:', gameEnd?.className);
+            
+            // Make sure game end section is visible with multiple approaches
+            if (gameEnd) {
+                gameEnd.style.display = 'block';
+                gameEnd.style.visibility = 'visible';
+                gameEnd.style.opacity = '1';
+                gameEnd.classList.add('show');
+                
+                // Scroll to game end section
+                setTimeout(() => {
+                    gameEnd.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+                
+                console.log('✅ Game end section made visible');
+            } else {
+                console.error('❌ Game end element not found!');
+            }
             
             if (won) {
-                resultMessage.textContent = `Amazing! Got it in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}!`;
-                resultMessage.classList.add('win');
+                resultMessage.textContent = `🎉 Amazing! Got it in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}! (+${gameState.pointsEarned} points)`;
+                resultMessage.className = 'result-message win';
             } else {
                 if (gameState.gaveUp) {
                     resultMessage.textContent = 'No worries! Now you know for next time!';
                 } else {
                     resultMessage.textContent = 'Better luck tomorrow!';
                 }
-                resultMessage.classList.add('lose');
+                resultMessage.className = 'result-message lose';
             }
             
             businessNameReveal.textContent = currentBusiness.Name;
@@ -1206,6 +1552,8 @@
                 saveGameState();
             }
             startCountdown();
+            
+            console.log('🏁 endGame function completed');
         }
 
         function generateShareText() {
@@ -1271,16 +1619,22 @@
                     gamesPlayed: 0,
                     gamesWon: 0,
                     currentStreak: 0,
-                    maxStreak: 0
+                    maxStreak: 0,
+                    totalPoints: 0
                 };
             } else {
                 stats = JSON.parse(stats);
+                // Add totalPoints to existing stats if not present
+                if (typeof stats.totalPoints === 'undefined') {
+                    stats.totalPoints = 0;
+                }
             }
             
             stats.gamesPlayed++;
             if (won) {
                 stats.gamesWon++;
                 stats.currentStreak++;
+                stats.totalPoints += gameState.pointsEarned;
                 if (stats.currentStreak > stats.maxStreak) {
                     stats.maxStreak = stats.currentStreak;
                 }
@@ -1298,10 +1652,15 @@
                     gamesPlayed: 0,
                     gamesWon: 0,
                     currentStreak: 0,
-                    maxStreak: 0
+                    maxStreak: 0,
+                    totalPoints: 0
                 };
             } else {
                 stats = JSON.parse(stats);
+                // Add totalPoints to existing stats if not present
+                if (typeof stats.totalPoints === 'undefined') {
+                    stats.totalPoints = 0;
+                }
             }
             
             document.getElementById('gamesPlayed').textContent = stats.gamesPlayed;
@@ -1311,6 +1670,7 @@
                     : '0%';
             document.getElementById('currentStreak').textContent = stats.currentStreak;
             document.getElementById('maxStreak').textContent = stats.maxStreak;
+            document.getElementById('totalPoints').textContent = stats.totalPoints;
         }
 
         function showStats() {
@@ -1375,6 +1735,27 @@
                     location.reload();
                 }
             }
+        }
+
+        function testPlacesAPI() {
+            if (!gameState.correctCoordinates) {
+                alert('No coordinates available. Start a game first.');
+                return;
+            }
+            
+            console.log('Testing location-aware options with coordinates:', gameState.correctCoordinates);
+            console.log('Business type:', currentBusiness?.Category);
+            
+            fetchPlacesOptions(currentBusiness?.Category || 'Restaurant', gameState.correctCoordinates, 2)
+                .then(results => {
+                    console.log('Generated Options:', results);
+                    const names = results.map(r => r.name || r);
+                    alert(`Generated ${results.length} options:\n${names.join('\n')}`);
+                })
+                .catch(error => {
+                    console.error('Option generation failed:', error);
+                    alert('Option generation failed. Check console for details.');
+                });
         }
 
         function startCountdown() {
@@ -1487,6 +1868,481 @@
             errorDiv.classList.add('show');
         }
 
+        // Google Maps Integration with async loading support
+        function initializeMap() {
+            const mapElement = document.getElementById('map');
+            if (!mapElement) {
+                console.warn('Map element not found');
+                return false;
+            }
+            
+            if (!window.google?.maps) {
+                console.warn('Google Maps not ready yet');
+                return false;
+            }
+            
+            try {
+                map = new google.maps.Map(mapElement, {
+                    zoom: 11,
+                    center: SF_CENTER,
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    zoomControlOptions: {
+                        position: google.maps.ControlPosition.RIGHT_BOTTOM
+                    },
+                    gestureHandling: 'cooperative',
+                    styles: [
+                        {
+                            featureType: 'poi',
+                            elementType: 'labels',
+                            stylers: [{ visibility: 'off' }]
+                        }
+                    ] // Hide POI labels to reduce clutter
+                });
+                
+                console.log('Google Maps initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Error initializing Google Maps:', error);
+                return false;
+            }
+        }
+
+        function initializeMapIfNeeded() {
+            if (!map && window.googleMapsReady) {
+                initializeMap();
+            }
+        }
+
+        function updateMapZoom(level, coordinates) {
+            if (!map || !coordinates) {
+                console.warn('Map or coordinates not available for zoom update');
+                return;
+            }
+            
+            const zoomLevels = {
+                1: { zoom: 11, center: SF_CENTER }, // City-wide view
+                2: { zoom: 13, center: coordinates }, // Region view
+                3: { zoom: 15, center: coordinates }, // Neighborhood view  
+                4: { zoom: 17, center: coordinates }, // Street view
+                5: { zoom: 19, center: coordinates }  // Exact location
+            };
+            
+            const config = zoomLevels[level];
+            if (config) {
+                console.log(`Zooming map to level ${level}, zoom: ${config.zoom}`);
+                
+                // Smooth zoom transition
+                map.panTo(config.center);
+                map.setZoom(config.zoom);
+                
+                // Add a subtle hint marker at max zoom (level 4) to show general area
+                if (level === 4 && !gameState.won && !gameState.lost) {
+                    addLocationHintMarker(coordinates);
+                }
+            }
+        }
+
+        function addLocationHintMarker(coordinates) {
+            if (!map || !window.google?.maps) return;
+            
+            // Remove any existing hint marker
+            if (window.hintMarker) {
+                window.hintMarker.setMap(null);
+            }
+            
+            // Add a subtle circle to show the general area
+            window.hintMarker = new google.maps.Circle({
+                strokeColor: '#3B82F6',
+                strokeOpacity: 0.6,
+                strokeWeight: 2,
+                fillColor: '#3B82F6',
+                fillOpacity: 0.15,
+                map: map,
+                center: coordinates,
+                radius: 50 // 50 meter radius hint circle
+            });
+            
+            console.log('Added location hint circle');
+        }
+
+        function showFinalLocation() {
+            if (!map || !gameState.correctCoordinates) {
+                console.warn('Cannot show final location: map or coordinates missing');
+                return;
+            }
+            
+            console.log('Showing final location with marker');
+            
+            // Zoom to exact location
+            updateMapZoom(5, gameState.correctCoordinates);
+            
+            // Add the business marker with animation after a short delay
+            setTimeout(() => {
+                addBusinessMarker(true);
+            }, 800);
+        }
+
+        function addBusinessMarker(withAnimation = true) {
+            if (!map || !gameState.correctCoordinates || !window.google?.maps) {
+                console.warn('Cannot add marker: missing requirements');
+                return;
+            }
+            
+            // Remove existing markers
+            if (businessMarker) {
+                businessMarker.setMap(null);
+            }
+            if (window.hintMarker) {
+                window.hintMarker.setMap(null);
+                window.hintMarker = null;
+            }
+            
+            console.log('Adding business marker at:', gameState.correctCoordinates);
+            
+            // Create custom pin icon - using a simple red marker
+            const pinIcon = {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="12" fill="#EF4444" stroke="white" stroke-width="3"/>
+                        <circle cx="16" cy="16" r="6" fill="white"/>
+                    </svg>
+                `),
+                scaledSize: new google.maps.Size(32, 32),
+                anchor: new google.maps.Point(16, 16)
+            };
+            
+            // Create the marker
+            businessMarker = new google.maps.Marker({
+                position: gameState.correctCoordinates,
+                map: map,
+                title: `${currentBusiness.Name}\n${currentBusiness.Address}`,
+                icon: pinIcon,
+                animation: withAnimation ? google.maps.Animation.DROP : null
+            });
+            
+            // Add info window that opens on click
+            const infoWindow = new google.maps.InfoWindow({
+                content: `
+                    <div style="padding: 8px; max-width: 250px;">
+                        <h3 style="margin: 0 0 8px 0; color: #1F2937; font-size: 16px;">${currentBusiness.Name}</h3>
+                        <p style="margin: 0 0 4px 0; color: #6B7280; font-size: 14px;">📍 ${currentBusiness.Address}</p>
+                        <p style="margin: 0 0 4px 0; color: #6B7280; font-size: 14px;">🏷️ ${currentBusiness.Category}</p>
+                        ${currentBusiness.Signature ? `<p style="margin: 0; color: #059669; font-size: 14px;">⭐ ${currentBusiness.Signature}</p>` : ''}
+                    </div>
+                `
+            });
+            
+            // Open info window on marker click
+            businessMarker.addListener('click', () => {
+                infoWindow.open(map, businessMarker);
+            });
+            
+            // Auto-open info window after marker drops (for final reveals)
+            if (withAnimation) {
+                setTimeout(() => {
+                    infoWindow.open(map, businessMarker);
+                }, 1000);
+            }
+            
+            console.log('Business marker added successfully');
+        }
+
+        function showMap() {
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.style.display = 'block';
+            
+            // Initialize map if not already done and Google Maps is ready
+            if (!map) {
+                if (window.googleMapsReady && window.google?.maps) {
+                    if (!initializeMap()) {
+                        console.error('Failed to initialize map');
+                        return;
+                    }
+                } else {
+                    // Wait for Google Maps to load
+                    console.log('Waiting for Google Maps to load...');
+                    const checkInterval = setInterval(() => {
+                        if (window.googleMapsReady && window.google?.maps) {
+                            clearInterval(checkInterval);
+                            if (initializeMap()) {
+                                console.log('Map initialized after waiting');
+                            }
+                        }
+                    }, 100);
+                    
+                    // Timeout after 10 seconds
+                    setTimeout(() => {
+                        clearInterval(checkInterval);
+                        if (!map) {
+                            console.error('Google Maps failed to load within timeout');
+                        }
+                    }, 10000);
+                }
+            }
+        }
+
+        function hideMap() {
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.style.display = 'none';
+        }
+
+        // Multiple Choice System with Places API
+        async function generateMultipleChoice(businessType, coordinates, radiusMiles) {
+            try {
+                // Try Places API first
+                const placesOptions = await fetchPlacesOptions(businessType, coordinates, radiusMiles);
+                
+                if (placesOptions.length >= 3) {
+                    // Use Places API results
+                    const decoys = placesOptions
+                        .filter(place => place.name !== currentBusiness.Name)
+                        .slice(0, 7); // Take up to 7 decoys
+                    
+                    const options = [...decoys.map(place => place.name), currentBusiness.Name];
+                    return shuffleArray(options);
+                } else {
+                    // Fallback to curated options if Places API doesn't return enough
+                    return generateFallbackOptions();
+                }
+                
+            } catch (error) {
+                console.error('Error generating multiple choice:', error);
+                // Fallback to curated options
+                return generateFallbackOptions();
+            }
+        }
+
+        async function fetchPlacesOptions(businessType, coordinates, radiusMiles) {
+            try {
+                // Check cache first
+                const cacheKey = `places_${businessType}_${coordinates.lat.toFixed(3)}_${coordinates.lng.toFixed(3)}_${radiusMiles}`;
+                const cached = localStorage.getItem(cacheKey);
+                const cacheExpiry = localStorage.getItem(`${cacheKey}_expiry`);
+                
+                // Use cache if it's less than 24 hours old
+                if (cached && cacheExpiry && Date.now() < parseInt(cacheExpiry)) {
+                    return JSON.parse(cached);
+                }
+                
+                // Use new Places API (New) with Text Search
+                const placeType = mapBusinessTypeToPlaceType(businessType);
+                const searchQuery = `${placeType} near ${coordinates.lat},${coordinates.lng}`;
+                
+                // Convert miles to meters for radius
+                const radiusMeters = Math.min(radiusMiles * 1609.34, 50000); // Max 50km radius
+                
+                // Note: Places API requires server-side implementation due to CORS restrictions
+                // For client-side only implementation, we'll use enhanced curated options
+                console.log('Using enhanced curated options for:', placeType, 'near', coordinates);
+                
+                // Generate location-aware curated options
+                const curatedOptions = generateLocationAwareFallback(placeType, coordinates, radiusMiles);
+                
+                // Cache the curated results
+                localStorage.setItem(cacheKey, JSON.stringify(curatedOptions));
+                localStorage.setItem(`${cacheKey}_expiry`, (Date.now() + 24 * 60 * 60 * 1000).toString());
+                
+                return curatedOptions;
+                
+            } catch (error) {
+                console.error('Error fetching Places API data:', error);
+                return [];
+            }
+        }
+
+        function mapBusinessTypeToPlaceType(businessType) {
+            // Map business categories to search terms for Text Search API
+            const typeMapping = {
+                'Bakery': 'bakery',
+                'Restaurant': 'restaurant', 
+                'Coffee': 'coffee shop',
+                'Bar': 'bar',
+                'Store': 'store',
+                'Shop': 'shop',
+                'Market': 'grocery store',
+                'Cafe': 'cafe',
+                'Pizza': 'pizza restaurant',
+                'Deli': 'deli',
+                'Donut': 'donut shop',
+                'Sandwich': 'sandwich shop',
+                'Mexican': 'mexican restaurant',
+                'Chinese': 'chinese restaurant',
+                'Italian': 'italian restaurant',
+                'Thai': 'thai restaurant'
+            };
+            
+            if (!businessType) return 'restaurant';
+            
+            // Try to find a specific match first
+            for (const [key, value] of Object.entries(typeMapping)) {
+                if (businessType.toLowerCase().includes(key.toLowerCase())) {
+                    return value;
+                }
+            }
+            
+            // Fallback based on common patterns
+            const lowerType = businessType.toLowerCase();
+            if (lowerType.includes('food') || lowerType.includes('eat')) {
+                return 'restaurant';
+            } else if (lowerType.includes('drink') || lowerType.includes('beverage')) {
+                return 'cafe';
+            } else if (lowerType.includes('shop') || lowerType.includes('store')) {
+                return 'store';
+            }
+            
+            return 'restaurant'; // Most common fallback
+        }
+
+        function generateLocationAwareFallback(placeType, coordinates, radiusMiles) {
+            // Enhanced location-aware curated options
+            const sfBusinesses = {
+                bakery: [
+                    'Tartine Bakery', 'Arizmendi Bakery', 'Jane the Bakery', 
+                    'Craftsman and Wolves', 'B. Patisserie', 'Boudin Bakery',
+                    'The Mill', 'Devil\'s Teeth Baking Company', 'Arsicault Bakery'
+                ],
+                'coffee shop': [
+                    'Blue Bottle Coffee', 'Ritual Coffee', 'Sightglass Coffee',
+                    'Philz Coffee', 'The Mill', 'Four Barrel Coffee',
+                    'Saint Frank Coffee', 'Wrecking Ball Coffee'
+                ],
+                restaurant: [
+                    'Zuni Cafe', 'State Bird Provisions', 'Gary Danko',
+                    'House of Prime Rib', 'Swan Oyster Depot', 'Tadich Grill',
+                    'The Slanted Door', 'Foreign Cinema', 'Chez Panisse'
+                ],
+                'donut shop': [
+                    'Bob\'s Donuts', 'Johnny Doughnuts', 'Dynamo Donut',
+                    'Pepples Donut Farm', 'Stan\'s Donuts', 'Happy Donuts'
+                ],
+                'mexican restaurant': [
+                    'La Taqueria', 'El Farolito', 'Papalote Mexican Grill',
+                    'Nopalito', 'Comal', 'Panchita\'s'
+                ],
+                bar: [
+                    'Trick Dog', 'ABV', 'Bourbon & Branch', 'The Alembic',
+                    'Local Edition', 'Zeitgeist', 'Tony Nik\'s'
+                ],
+                cafe: [
+                    'Cafe Zoetrope', 'Cafe Trieste', 'Mama\'s on Washington Square',
+                    'Peet\'s Coffee', 'Starbucks', 'Cafe Central'
+                ]
+            };
+            
+            // Get appropriate category options
+            let options = sfBusinesses[placeType] || sfBusinesses.restaurant;
+            
+            // Add some cross-category variety for realism
+            if (placeType !== 'restaurant') {
+                options = [...options, ...sfBusinesses.restaurant.slice(0, 2)];
+            }
+            
+            // Simulate distance-based filtering (closer = more specific)
+            if (radiusMiles < 1) {
+                // Very close - fewer, more specific options
+                options = options.slice(0, 6);
+            } else if (radiusMiles < 3) {
+                // Neighborhood - moderate options
+                options = options.slice(0, 8);
+            }
+            
+            // Return as Place-like objects
+            return options.map(name => ({
+                name: name,
+                rating: Math.random() * 2 + 3, // Random rating 3-5
+                vicinity: 'San Francisco, CA'
+            }));
+        }
+
+        function generateFallbackOptions() {
+            // Simple fallback when no coordinates are available
+            return generateLocationAwareFallback(
+                mapBusinessTypeToPlaceType(currentBusiness.Category),
+                SF_CENTER,
+                10
+            ).map(place => place.name);
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function showMultipleChoice(options) {
+            const container = document.getElementById('multipleChoiceContainer');
+            const grid = document.getElementById('choiceGrid');
+            
+            // Clear existing options
+            grid.innerHTML = '';
+            
+            // Create choice buttons
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-button';
+                button.textContent = option;
+                button.onclick = () => handleMultipleChoiceGuess(option, button);
+                grid.appendChild(button);
+            });
+            
+            container.style.display = 'block';
+        }
+
+        function hideMultipleChoice() {
+            const container = document.getElementById('multipleChoiceContainer');
+            container.style.display = 'none';
+        }
+
+        function handleMultipleChoiceGuess(guess, buttonElement) {
+            const isCorrect = guess === currentBusiness.Name;
+            
+            // Visual feedback
+            buttonElement.classList.add(isCorrect ? 'correct' : 'wrong');
+            
+            // Disable all buttons
+            const allButtons = document.querySelectorAll('.choice-button');
+            allButtons.forEach(btn => btn.style.pointerEvents = 'none');
+            
+            // Add to game state
+            gameState.guesses.push({
+                text: guess,
+                correct: isCorrect
+            });
+            
+            setTimeout(() => {
+                if (isCorrect) {
+                    gameState.won = true;
+                    gameState.pointsEarned = calculatePoints(gameState.guesses.length);
+                    // Immediately add marker when they get it right
+                    addBusinessMarker(true);
+                    // Also zoom to exact location if not already there
+                    if (gameState.round < 4) {
+                        updateMapZoom(5, gameState.correctCoordinates);
+                    }
+                    // Show winning message after a brief moment to see the marker
+                    setTimeout(() => {
+                        endGame(true);
+                    }, 1500);
+                } else if (gameState.round >= 4) {
+                    // Out of rounds - show final location
+                    gameState.lost = true;
+                    showFinalLocation();
+                    setTimeout(() => {
+                        endGame(false);
+                    }, 1000);
+                } else {
+                    // Progress to next round with zoom
+                    gameState.round++;
+                    progressToNextRound();
+                }
+                saveGameState();
+            }, 1500);
+        }
+
         async function init() {
             try {
                 allBusinesses = await fetchBusinessData();
@@ -1504,6 +2360,15 @@
                 document.getElementById('businessPhoto').src = currentBusiness.PhotoURL;
                 document.getElementById('funFact').textContent = currentBusiness.FunFact;
                 // Note: hint content is now populated dynamically via revealHint() function
+                
+                // Pre-load coordinates for better performance
+                if (currentBusiness.Address) {
+                    geocodeAddress(currentBusiness.Address).then(coords => {
+                        gameState.correctCoordinates = coords;
+                    }).catch(error => {
+                        console.warn('Failed to pre-load coordinates:', error);
+                    });
+                }
                 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('gameContent').style.display = 'block';

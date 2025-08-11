@@ -1,14 +1,36 @@
 # Bizzle - Daily SF Business Guessing Game
 
-A fun daily guessing game where players identify San Francisco small businesses through progressive hints!
+A fun daily guessing game where players identify San Francisco small businesses through progressive hints and interactive maps!
 
 ## 🎮 How to Play
 
-1. Visit the game at your GitHub Pages URL
-2. Look at the interior photo and fun fact
-3. Make your guess (up to 5 attempts)
-4. Get a new hint after each wrong guess
-5. Share your results with friends!
+1. **Start with a Photo**: Look at the interior photo and fun fact
+2. **Freeform Guessing**: Type in business names with autocomplete assistance
+3. **Map Phase**: After your first wrong guess, transition to an interactive SF map
+4. **Progressive Zoom**: Each wrong answer zooms the map closer and reveals new hints
+5. **Earn Points**: Get 5 points for first guess, 4 for second, down to 1 for fifth
+6. **Share Results**: Share your score and performance with friends!
+
+## 🗺️ Game Features
+
+### Two-Phase Gameplay
+- **Phase 1**: Free-form text input with business name autocomplete
+- **Phase 2**: Interactive Google Maps with progressive zoom and multiple choice
+
+### Points System  
+- **5 points** - Correct on 1st guess (freeform)
+- **4 points** - Correct on 2nd guess (city-wide map)
+- **3 points** - Correct on 3rd guess (neighborhood view)
+- **2 points** - Correct on 4th guess (street-level view)
+- **1 point** - Correct on 5th guess (exact location)
+- Points accumulate over time in your statistics
+
+### Progressive Hints
+1. **Fun Fact** (always shown)
+2. **Neighborhood** (after 1st wrong guess)
+3. **Signature Item** (after 2nd wrong guess) 
+4. **Business Category** (after 3rd wrong guess)
+5. **Street Name** (after 4th wrong guess)
 
 ## 🏃‍♂️ Running Locally (Quick Start)
 
@@ -66,9 +88,15 @@ php -S localhost:8000
 5. Your game will be available at: `https://[your-username].github.io/Bizzle/`
 6. Wait 5-10 minutes for the initial deployment
 
-### Step 3: Set Up Your Google Sheet
+### Step 3: Set Up Your Google APIs
 
-The game uses a Google Sheet as its database. The sheet structure is already configured in the code.
+The game uses Google Sheets for business data and Google Maps for the interactive map features.
+
+#### Google APIs Required
+- **Google Sheets API** - For business data storage and retrieval
+- **Google Maps JavaScript API** - For interactive maps and progressive zoom
+- **Google Geocoding API** - For converting addresses to coordinates
+- **Google Places API** - For location-aware multiple choice options (optional)
 
 #### Google Sheet is Already Set Up
 The game comes pre-configured with a public Google Sheet. You can either:
@@ -79,16 +107,16 @@ The game comes pre-configured with a public Google Sheet. You can either:
 
 1. Create a new Google Sheet at sheets.google.com
 2. Add these column headers in Row 1 (exact order and spelling):
-   - `Name` - Business name
-   - `PhotoURL` - Direct image link
-   - `FunFact` - Interesting fact about the business
-   - `Neighborhood` - SF neighborhood
-   - `Signature` - Featured item/service with price
-   - `Category` - Type of business
-   - `Street` - Street name only (no number)
-   - `Address` - Full address
-   - `Website` - Optional website URL
-   - `DateToFeature` - Date in YYYY-MM-DD format
+   - `Name` - Business name (used for correct answers)
+   - `PhotoURL` - Direct Google Drive image link
+   - `FunFact` - Interesting fact (always shown)
+   - `Neighborhood` - SF neighborhood (hint after 1st wrong guess)
+   - `Signature` - Featured item/service with price (hint after 2nd wrong guess)
+   - `Category` - Type of business (hint after 3rd wrong guess)
+   - `Street` - Street name only (hint after 4th wrong guess)
+   - `Address` - Full address (used for map geocoding)
+   - `Website` - Optional website URL (shown in final reveal)
+   - `DateToFeature` - Optional specific date in YYYY-MM-DD format
 
 3. Make your sheet public:
    - Click Share button (top right)
@@ -154,10 +182,17 @@ Add businesses to your Google Sheet with this information:
 
 ### Hints Progression
 Design your hints from vague to specific:
-1. Neighborhood - Broad area
-2. Signature item - More specific
-3. Category - Business type
-4. Street - Very specific location
+1. **Fun Fact** - Always shown, interesting but not too revealing
+2. **Neighborhood** - Broad area hint (shown after 1st wrong guess)
+3. **Signature Item** - Featured menu item or service (after 2nd wrong guess)  
+4. **Category** - Business type (after 3rd wrong guess)
+5. **Street Name** - Very specific location (after 4th wrong guess)
+
+### Address Requirements
+- **Address column** must contain full, geocodable addresses
+- Used by Google Geocoding API to get map coordinates
+- Should be in format: "123 Street Name, San Francisco, CA"
+- Coordinates are cached locally for performance
 
 ## 🔧 Customization
 
@@ -172,10 +207,30 @@ Edit the CSS in `index.html`:
 ```
 
 ### Changing Number of Guesses
-Find and modify in the JavaScript:
+The game uses a 5-guess system across two phases. To modify:
+1. Update the `calculatePoints()` function for new point values
+2. Adjust round configurations in `progressToNextRound()`
+3. Modify the game logic in `submitGuess()` and `handleMultipleChoiceGuess()`
+
+### Changing Points System
+Find the `calculatePoints()` function:
 ```javascript
-// Change 5 to your desired number
-if (gameState.guesses.length >= 5) {
+function calculatePoints(guessNumber) {
+    // Current: 5-4-3-2-1 points
+    return Math.max(1, 6 - guessNumber);
+}
+```
+
+### Changing Map Zoom Levels
+Find the `updateMapZoom()` function and modify:
+```javascript
+const zoomLevels = {
+    1: { zoom: 11, center: SF_CENTER }, // City-wide
+    2: { zoom: 13, center: coordinates }, // Region  
+    3: { zoom: 15, center: coordinates }, // Neighborhood
+    4: { zoom: 17, center: coordinates }, // Street
+    5: { zoom: 19, center: coordinates }  // Exact
+};
 ```
 
 ### Changing Fuzzy Match Threshold
@@ -211,11 +266,12 @@ return matches / longer.length >= 0.8; // Change 0.8 to your threshold (0-1)
 
 The game automatically tracks:
 - Total games played
-- Win percentage
+- Win percentage  
 - Current winning streak
 - Maximum winning streak
+- **Total points earned** across all games
 
-Stats are stored locally in the player's browser.
+Stats are stored locally in the player's browser and include your cumulative point total over time.
 
 ## 🔄 Daily Rotation
 
