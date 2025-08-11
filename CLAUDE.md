@@ -35,9 +35,10 @@ No formal testing framework is configured. Testing is done manually:
 ## Architecture
 
 ### Single-File Application
-- **index.html**: Contains all HTML, CSS, and JavaScript in one file (~3,600+ lines)
+- **index.html**: Contains all HTML, CSS, and JavaScript in one file (~3,900+ lines)
 - Pure vanilla JavaScript, no frameworks or dependencies
 - Client-side only - no backend server required
+- **Theme**: Beautiful Catppuccin Mocha dark theme throughout
 
 ### Core Components
 - **Data Source**: Google Sheets API for business data storage
@@ -51,7 +52,9 @@ No formal testing framework is configured. Testing is done manually:
 - **Karl the Fog**: Animated mascot that floats around (toggleable)
 - **Modals**: Tutorial, Statistics, Why Bizzle?, Debug menu
 - **Local Storage**: Game state, statistics, achievements, visits, coordinate caching
-- **Responsive UI**: Mobile-friendly design with CSS Grid/Flexbox
+- **Responsive UI**: Mobile-friendly design with CSS Grid/Flexbox, compact header behavior
+- **Skip Feature**: "Multiple Choice" button to jump directly to map phase
+- **Floating Settings**: Bottom-right floating buttons for settings (stats, Karl toggle, debug)
 
 ### Key Configuration
 - `SHEET_ID`: Google Sheets document ID (line ~979)
@@ -90,12 +93,13 @@ No formal testing framework is configured. Testing is done manually:
 - Points accumulate in totalPoints statistic over time
 
 ### Customization Points
-- Color scheme: CSS custom properties throughout the file
-- Number of rounds/guesses: Update game logic and round configurations
-- Fuzzy matching sensitivity: Adjust threshold in fuzzyMatch function
-- Map zoom progression: Modify zoomLevels object in updateMapZoom
-- Points scoring: Change calculatePoints function
-- Sheet structure: Expected columns defined in README
+- **Color scheme**: Catppuccin Mocha theme with CSS custom properties
+- **Number of rounds/guesses**: Update game logic and round configurations
+- **Fuzzy matching sensitivity**: Adjust threshold in fuzzyMatch function
+- **Map zoom progression**: Modify zoomLevels object in updateMapZoom
+- **Points scoring**: Change calculatePoints function
+- **Sheet structure**: Expected columns defined in README
+- **UI Behavior**: Header auto-hiding, compact clues, settings placement
 
 ## Google Sheets Integration
 Business data format:
@@ -145,10 +149,30 @@ Stored in localStorage as JSON:
 - **Discovery Achievements**: First timer, explorer (10 wins), local expert (25 wins)
 - **Visit Achievements**: Adventurer (1 visit), foodie (5 visits), local legend (15 visits)
 
-## New Features
+## UI/UX Features
+
+### Theme & Design
+- **Catppuccin Mocha Theme**: Beautiful dark theme with consistent color palette
+- **Compact Interface**: Smaller clues, hidden round info boxes for cleaner mobile UX
+- **Auto-hiding Header**: Title section disappears after first wrong guess to save space
+- **Floating Settings**: Bottom-right circular buttons for stats, Karl toggle, and debug
+- **Enhanced Typography**: Monospace font for website links with better contrast
+
+### Game Controls
+- **Multiple Choice Button**: Skip directly to map phase with "🗺️ Multiple Choice" button
+- **Give Up Option**: Traditional surrender with full hint reveal
+- **Responsive Buttons**: Proper sizing and spacing for mobile devices
+
+### Accessibility & Polish
+- **High Contrast**: All text properly readable against Catppuccin backgrounds
+- **Smooth Animations**: Polished hover effects and transitions
+- **Mobile Optimized**: Touch-friendly buttons and compact layouts
+- **Clean Victory Page**: Removed redundant "Your Guesses" section
+
+### Original Features
 - **Tutorial Modal**: Shows on first visit to explain gameplay
-- **"Why Bizzle?" Modal**: Explains mission to support local businesses
-- **Karl the Fog**: Animated mascot that floats around (can be toggled on/off)
+- **"Why Bizzle?" Modal**: Explains mission to support local businesses  
+- **Karl the Fog**: Animated mascot that floats around (toggleable, disabled by default)
 - **Visit Tracking**: "I Went There!" button for bonus points
 - **Achievement Notifications**: Pop-up celebrations when unlocking badges
 - **Enhanced Sharing**: Results include achievements in share text

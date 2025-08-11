@@ -301,6 +301,11 @@
             margin-top: 16px;
         }
 
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+
         .give-up-button {
             background: #6c7086; /* Catppuccin Overlay0 */
             color: #cdd6f4; /* Catppuccin Text */
@@ -322,6 +327,32 @@
 
         .give-up-button:disabled {
             background: #6c7086; /* Catppuccin Overlay0 */
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
+
+        .multiple-choice-button {
+            background: linear-gradient(135deg, #89b4fa 0%, #74c7ec 100%); /* Catppuccin Blue to Sky */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .multiple-choice-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #74c7ec 0%, #89dceb 100%); /* Catppuccin Sky to Sapphire */
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        .multiple-choice-button:disabled {
+            background: #6c7086; /* Catppuccin Overlay0 */
+            color: #a6adc8; /* Catppuccin Subtext1 */
             cursor: not-allowed;
             opacity: 0.3;
         }
@@ -1284,6 +1315,15 @@
                 padding: 6px 14px;
             }
 
+            .multiple-choice-button {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
+
+            .button-group {
+                gap: 6px;
+            }
+
             .map {
                 height: 250px;
             }
@@ -1332,7 +1372,10 @@
                     <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
                 </div>
                 <div class="give-up-container">
-                    <button id="giveUpButton" class="give-up-button" onclick="giveUp()" title="Reveal the answer">🏳️ I give up</button>
+                    <div class="button-group">
+                        <button id="multipleChoiceButton" class="multiple-choice-button" onclick="skipToMultipleChoice()" title="Skip to map and multiple choice">🗺️ Multiple Choice</button>
+                        <button id="giveUpButton" class="give-up-button" onclick="giveUp()" title="Reveal the answer">🏳️ I give up</button>
+                    </div>
                     <div class="guess-counter">
                         <span id="guessCounter">5 guesses remaining</span>
                     </div>
@@ -1692,6 +1735,7 @@
                 guessInput: document.getElementById('guessInput'),
                 submitButton: document.getElementById('submitButton'),
                 giveUpButton: document.getElementById('giveUpButton'),
+                multipleChoiceButton: document.getElementById('multipleChoiceButton'),
                 autocompleteDropdown: document.getElementById('autocompleteDropdown'),
                 
                 // Photo and hints
@@ -2161,6 +2205,24 @@
                 endGame(false);
                 saveGameState();
             }
+        }
+
+        function skipToMultipleChoice() {
+            if (gameState.won || gameState.lost) return;
+            
+            // Add the first guess as incorrect to trigger map phase
+            const fakeGuess = {
+                text: "→ Skipped to Map",
+                correct: false
+            };
+            gameState.guesses.push(fakeGuess);
+            
+            // Transition to multiple choice phase
+            transitionToMultipleChoice();
+            
+            // Update counter and save state
+            updateGuessCounter();
+            saveGameState();
         }
 
         function submitGuess() {

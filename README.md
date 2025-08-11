@@ -6,12 +6,13 @@ A fun daily guessing game where players identify San Francisco small businesses 
 
 1. **Start with a Photo**: Look at the interior photo and fun fact
 2. **Freeform Guessing**: Type in business names with autocomplete assistance
-3. **Map Phase**: After your first wrong guess, transition to an interactive SF map
-4. **Progressive Zoom**: Each wrong answer zooms the map closer and reveals new hints
-5. **Earn Points**: Get 5 points for first guess, 4 for second, down to 1 for fifth
-6. **Visit Tracking**: Mark places as visited for +2 bonus points!
-7. **Unlock Achievements**: Build streaks, score perfectly, and explore to earn badges
-8. **Share Results**: Share your score and achievements with friends!
+3. **Skip Option**: Click "🗺️ Multiple Choice" to jump directly to the map phase
+4. **Map Phase**: After your first wrong guess (or skip), transition to an interactive SF map
+5. **Progressive Zoom**: Each wrong answer zooms the map closer and reveals new hints
+6. **Earn Points**: Get 5 points for first guess, 4 for second, down to 1 for fifth
+7. **Visit Tracking**: Mark places as visited for +2 bonus points!
+8. **Unlock Achievements**: Build streaks, score perfectly, and explore to earn badges
+9. **Share Results**: Share your score and achievements with friends!
 
 ## 🗺️ Game Features
 
@@ -44,15 +45,42 @@ Unlock 13 different achievements across 4 categories:
 
 ### 🌫️ Karl the Fog
 - Meet Karl, SF's beloved fog mascot who floats around the interface
-- Toggle Karl on/off with the fog button in the header
-- Karl celebrates when you win or unlock achievements!
+- Toggle Karl on/off with the fog button in the floating settings (bottom-right)
+- Karl is disabled by default but celebrates when you win or unlock achievements!
+- Smooth animations and transparent design for non-intrusive experience
 
 ### 📱 User Experience
+- **Beautiful Dark Theme** - Catppuccin Mocha color palette for eye-friendly gaming
+- **Mobile Optimized** - Compact interface with auto-hiding header to maximize screen space
+- **Floating Settings** - Bottom-right circular buttons for stats, Karl toggle, and debug
+- **Skip to Map** - "Multiple Choice" button to jump directly to visual map gameplay
 - **Tutorial** - First-time players get a helpful walkthrough
 - **"Why Bizzle?"** - Learn about our mission to support local businesses
-- **Visit Tracking** - Mark businesses as visited for bonus points
-- **Statistics Dashboard** - Track your progress and achievements
+- **Visit Tracking** - Mark businesses as visited for bonus points with enhanced styling
+- **Statistics Dashboard** - Track your progress and achievements with clear readability
 - **Social Sharing** - Share your results with achievement badges
+- **Clean Victory Page** - Streamlined results without clutter
+
+## 🎨 Design & Accessibility
+
+### Catppuccin Mocha Theme
+Bizzle features a beautiful dark theme using the popular Catppuccin Mocha color palette:
+- **Dark Background** - Easy on the eyes for extended play sessions
+- **High Contrast Text** - All text is carefully chosen for optimal readability
+- **Consistent Colors** - Blue, sky, green, pink, and yellow accents from official Catppuccin spec
+- **Smooth Animations** - Polished hover effects and transitions throughout
+
+### Mobile-First Design
+- **Compact Layout** - Smaller clues and hidden UI elements save precious screen space
+- **Auto-hiding Header** - Title disappears after first guess to maximize game area
+- **Touch-Friendly** - All buttons properly sized for mobile interaction
+- **Responsive Typography** - Font sizes and spacing optimized for all screen sizes
+
+### Enhanced Readability
+- **Monospace Links** - Website URLs use cool developer fonts for better visibility
+- **Color-Coded Elements** - Different UI states use distinct but harmonious colors
+- **Improved Contrast** - Debug menu, stats, and achievement text fully readable
+- **Clean Information Hierarchy** - Important elements stand out clearly
 
 ## 🏃‍♂️ Running Locally (Quick Start)
 
