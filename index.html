@@ -25,83 +25,78 @@
             max-width: 520px;
             width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 16px;
             flex: 1;
         }
 
         header {
             text-align: center;
-            padding: 24px 0;
+            padding: 16px 0;
             background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
-            border-radius: 16px;
-            margin-bottom: 24px;
+            border-radius: 12px;
+            margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             border: 1px solid #E2E8F0;
         }
 
         h1 {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 800;
             background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .tagline {
-            font-size: 16px;
+            font-size: 14px;
             color: #64748B;
             font-weight: 500;
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
-        .stats-button {
-            position: absolute;
-            top: 20px;
+        /* Footer Settings */
+        .footer-settings {
+            position: fixed;
+            bottom: 20px;
             right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
         }
 
-        .debug-button {
-            position: absolute;
-            top: 20px;
-            right: 70px;
-            background: none;
-            border: none;
-            font-size: 24px;
+        .settings-button {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #E2E8F0;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
             cursor: pointer;
-            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            opacity: 0.8;
+        }
+
+        .settings-button:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .settings-button.karl-toggle {
             opacity: 0.6;
         }
 
-        .debug-button:hover {
+        .settings-button.karl-toggle:hover {
             opacity: 1;
         }
 
-        .karl-toggle-button {
-            position: absolute;
-            top: 20px;
-            right: 120px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
-            opacity: 0.6;
-            transition: opacity 0.2s, transform 0.2s;
-        }
-
-        .karl-toggle-button:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .karl-toggle-button.karl-disabled {
+        .settings-button.karl-disabled {
             opacity: 0.3;
             filter: grayscale(100%);
         }
@@ -110,12 +105,12 @@
             background: none;
             border: none;
             color: #64748B;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
-            padding: 6px 12px;
-            border-radius: 20px;
-            margin: 8px 0 4px 0;
+            padding: 4px 8px;
+            border-radius: 16px;
+            margin: 4px 0 2px 0;
             transition: all 0.2s ease;
             text-decoration: underline;
             text-decoration-style: dotted;
@@ -128,13 +123,13 @@
         }
 
         .game-number {
-            font-size: 14px;
+            font-size: 12px;
             color: #64748B;
-            margin-top: 8px;
+            margin-top: 4px;
             font-weight: 600;
             background: rgba(59, 130, 246, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 3px 10px;
+            border-radius: 16px;
             display: inline-block;
         }
 
@@ -255,27 +250,23 @@
         }
 
         .guess-section {
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             position: relative;
             background: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 2px solid #E5E7EB;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #E5E7EB;
         }
 
         .guess-counter {
-            text-align: center;
-            margin-bottom: 16px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #64748B;
-            background: #F1F5F9;
-            padding: 8px 16px;
-            border-radius: 20px;
+            font-weight: 500;
+            font-size: 12px;
+            color: #9CA3AF;
+            background: #F8FAFC;
+            padding: 4px 12px;
+            border-radius: 16px;
             display: inline-block;
-            width: 100%;
-            box-sizing: border-box;
         }
 
         .guess-counter.warning {
@@ -289,7 +280,9 @@
         }
 
         .give-up-container {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-top: 16px;
         }
 
@@ -1185,30 +1178,38 @@
 
         @media (max-width: 480px) {
             .container {
-                padding: 16px;
+                padding: 12px;
+            }
+
+            header {
+                padding: 12px 0;
+                margin-bottom: 12px;
             }
 
             h1 {
-                font-size: 32px;
+                font-size: 24px;
+                margin-bottom: 2px;
             }
 
-            .stats-button {
-                top: 20px;
-                right: 20px;
+            .tagline {
+                font-size: 13px;
             }
 
-            .karl-toggle-button {
-                top: 20px;
-                right: 70px;
+            .footer-settings {
+                bottom: 16px;
+                right: 16px;
+                gap: 8px;
             }
-            .debug-button {
-                top: 20px;
-                right: 120px;
+
+            .settings-button {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
             }
 
             .guess-section {
-                padding: 16px;
-                margin-bottom: 20px;
+                padding: 12px;
+                margin-bottom: 12px;
             }
 
             .guess-input {
@@ -1264,11 +1265,8 @@
 <body>
     <div class="container">
         <header>
-            <button class="stats-button" onclick="showStats()" aria-label="View Statistics">📊</button>
-            <button class="karl-toggle-button" onclick="toggleKarl()" aria-label="Toggle Karl the Fog" id="karlToggle">🌫️</button>
-            <button class="debug-button" onclick="showDebug()" aria-label="Debug Menu">🔧</button>
-            <h1>🏪 SF Bizzle</h1>
-            <p class="tagline">Guess the SF small business!</p>
+            <h1>SF Bizzle</h1>
+            <p class="tagline">How well do you know SF?</p>
             <button class="why-bizzle-button" onclick="showWhyBizzle()">Why Bizzle? 💝</button>
             <p class="game-number" id="gameNumber"></p>
         </header>
@@ -1282,20 +1280,20 @@
         <div id="gameContent" style="display: none;">
             <!-- Guess Section at Top -->
             <div id="guessSection" class="guess-section">
-                <div class="guess-counter">
-                    <span id="guessCounter">5 guesses remaining</span>
-                </div>
                 <div class="guess-input-container">
                     <input type="text" 
                            id="guessInput" 
                            class="guess-input" 
-                           placeholder="What business is this?"
+                           placeholder="Guess the Biz"
                            autocomplete="off">
                     <button id="submitButton" class="submit-button" onclick="submitGuess()" title="Submit guess">→</button>
                     <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
                 </div>
                 <div class="give-up-container">
                     <button id="giveUpButton" class="give-up-button" onclick="giveUp()" title="Reveal the answer">🏳️ I give up</button>
+                    <div class="guess-counter">
+                        <span id="guessCounter">5 guesses remaining</span>
+                    </div>
                 </div>
             </div>
 
@@ -1346,6 +1344,13 @@
                 <!-- Guess slots will be added dynamically -->
             </div>
         </div>
+    </div>
+
+    <!-- Footer with Settings -->
+    <div class="footer-settings">
+        <button class="settings-button" onclick="showStats()" aria-label="View Statistics" title="Statistics">📊</button>
+        <button class="settings-button karl-toggle" onclick="toggleKarl()" aria-label="Toggle Karl the Fog" id="karlToggle" title="Toggle Karl the Fog">🌫️</button>
+        <button class="settings-button" onclick="showDebug()" aria-label="Debug Menu" title="Debug Menu">🔧</button>
     </div>
 
     <div class="modal" id="statsModal">
@@ -1803,7 +1808,38 @@
                     return JSON.parse(cached);
                 }
                 
-                // Geocode via API if not cached
+                // Try using the Maps JavaScript API Geocoder (works with domain restrictions)
+                if (window.google && google.maps && google.maps.Geocoder) {
+                    return new Promise((resolve, reject) => {
+                        const geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({ address: address }, (results, status) => {
+                            if (status === 'OK' && results[0]) {
+                                const coords = {
+                                    lat: results[0].geometry.location.lat(),
+                                    lng: results[0].geometry.location.lng()
+                                };
+                                // Cache for future use
+                                localStorage.setItem(cacheKey, JSON.stringify(coords));
+                                resolve(coords);
+                            } else {
+                                console.warn(`Geocoding failed for "${address}": ${status}`);
+                                // Try the direct API as fallback
+                                geocodeViaAPI(address, cacheKey).then(resolve).catch(() => resolve(CONFIG.SF_CENTER));
+                            }
+                        });
+                    });
+                } else {
+                    // Fallback to direct API call
+                    return geocodeViaAPI(address, cacheKey);
+                }
+            } catch (error) {
+                console.error(`Geocoding error for "${address}":`, error.message);
+                return CONFIG.SF_CENTER;
+            }
+        }
+
+        async function geocodeViaAPI(address, cacheKey) {
+            try {
                 const encodedAddress = encodeURIComponent(address);
                 const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${CONFIG.API_KEY}`);
                 
@@ -1823,11 +1859,11 @@
                     localStorage.setItem(cacheKey, JSON.stringify(coords));
                     return coords;
                 } else {
-                    console.warn(`Geocoding failed for "${address}": ${data.status}`);
+                    console.warn(`Geocoding API failed for "${address}": ${data.status}`);
                     return CONFIG.SF_CENTER;
                 }
             } catch (error) {
-                console.error(`Geocoding error for "${address}":`, error.message);
+                console.error(`Geocoding API error for "${address}":`, error.message);
                 return CONFIG.SF_CENTER;
             }
         }
@@ -2781,9 +2817,9 @@
         function initializeKarl() {
             if (!domElements.karlTheFog) return;
 
-            // Check if Karl is enabled from localStorage (default: true)
+            // Check if Karl is enabled from localStorage (default: false)
             const karlEnabled = localStorage.getItem('karlEnabled');
-            karlAnimation.enabled = karlEnabled === null ? true : karlEnabled === 'true';
+            karlAnimation.enabled = karlEnabled === null ? false : karlEnabled === 'true';
             
             updateKarlToggleUI();
 
