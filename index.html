@@ -13,8 +13,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #FAFAFA;
-            color: #1A1A1A;
+            background-color: #1e1e2e; /* Catppuccin Base */
+            color: #cdd6f4; /* Catppuccin Text */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -32,11 +32,11 @@
         header {
             text-align: center;
             padding: 16px 0;
-            background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+            background: linear-gradient(135deg, #313244 0%, #45475a 100%); /* Catppuccin Surface0 to Surface1 */
             border-radius: 12px;
             margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            border: 1px solid #E2E8F0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid #585b70; /* Catppuccin Surface2 */
             transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
         }
 
@@ -53,7 +53,7 @@
         h1 {
             font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            background: linear-gradient(135deg, #89b4fa 0%, #74c7ec 100%); /* Catppuccin Blue to Sky */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -62,7 +62,7 @@
 
         .tagline {
             font-size: 14px;
-            color: #64748B;
+            color: #a6adc8; /* Catppuccin Subtext1 */
             font-weight: 500;
             margin-top: 4px;
         }
@@ -78,8 +78,8 @@
         }
 
         .settings-button {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #E2E8F0;
+            background: rgba(49, 50, 68, 0.9); /* Catppuccin Surface0 */
+            border: 1px solid #585b70; /* Catppuccin Surface2 */
             border-radius: 50%;
             width: 48px;
             height: 48px;
@@ -88,15 +88,17 @@
             justify-content: center;
             font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             transition: all 0.2s ease;
             opacity: 0.8;
+            color: #cdd6f4; /* Catppuccin Text */
         }
 
         .settings-button:hover {
             opacity: 1;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+            background: rgba(69, 71, 90, 0.9); /* Catppuccin Surface1 */
         }
 
         .settings-button.karl-toggle {
@@ -115,7 +117,7 @@
         .why-bizzle-button {
             background: none;
             border: none;
-            color: #64748B;
+            color: #a6adc8; /* Catppuccin Subtext1 */
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
@@ -128,17 +130,17 @@
         }
 
         .why-bizzle-button:hover {
-            color: #3B82F6;
-            background: rgba(59, 130, 246, 0.05);
+            color: #89b4fa; /* Catppuccin Blue */
+            background: rgba(137, 180, 250, 0.1);
             text-decoration: solid;
         }
 
         .game-number {
             font-size: 12px;
-            color: #64748B;
+            color: #a6adc8; /* Catppuccin Subtext1 */
             margin-top: 4px;
             font-weight: 600;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(137, 180, 250, 0.1); /* Catppuccin Blue tint */
             padding: 3px 10px;
             border-radius: 16px;
             display: inline-block;
@@ -167,23 +169,24 @@
             justify-content: center;
             align-items: center;
             height: 200px;
-            color: #666;
+            color: #a6adc8; /* Catppuccin Subtext1 */
         }
 
         .fun-fact {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border: 1px solid #F59E0B;
+            background: linear-gradient(135deg, #f9e2af 0%, #f2d5cf 100%); /* Catppuccin Yellow to Rosewater */
+            border: 1px solid #f9e2af; /* Catppuccin Yellow */
             padding: 10px 12px;
             border-radius: 8px;
             margin-bottom: 12px;
             font-size: 14px;
             line-height: 1.5;
-            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+            box-shadow: 0 2px 4px rgba(249, 226, 175, 0.3);
+            color: #1e1e2e; /* Catppuccin Base for contrast */
         }
 
         .clue-label {
             font-weight: 700;
-            color: #92400E;
+            color: #f38ba8; /* Catppuccin Pink */
             margin-bottom: 4px;
             font-size: 11px;
             text-transform: uppercase;
@@ -199,24 +202,25 @@
         }
 
         .new-hints .hint:first-child {
-            border: 3px solid #3B82F6;
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+            border: 3px solid #74c7ec; /* Catppuccin Sky */
+            box-shadow: 0 6px 20px rgba(116, 199, 236, 0.4);
             transform: scale(1.02);
         }
 
         .hint {
-            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
-            border: 2px solid #3B82F6;
+            background: linear-gradient(135deg, #74c7ec 0%, #89b4fa 100%); /* Catppuccin Sky to Blue */
+            border: 2px solid #74c7ec; /* Catppuccin Sky */
             padding: 10px 12px;
             border-radius: 8px;
             margin-bottom: 8px;
             display: block;
             animation: slideInFromTop 0.5s ease-out;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 2px 8px rgba(116, 199, 236, 0.3);
             font-size: 14px;
             font-weight: 500;
             opacity: 0;
             transform: translateY(-20px);
+            color: #1e1e2e; /* Catppuccin Base for contrast */
         }
 
         .hint.revealed {
@@ -263,31 +267,31 @@
         .guess-section {
             margin-bottom: 16px;
             position: relative;
-            background: white;
+            background: #313244; /* Catppuccin Surface0 */
             padding: 16px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #E5E7EB;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid #585b70; /* Catppuccin Surface2 */
         }
 
         .guess-counter {
             font-weight: 500;
             font-size: 12px;
-            color: #9CA3AF;
-            background: #F8FAFC;
+            color: #a6adc8; /* Catppuccin Subtext1 */
+            background: #45475a; /* Catppuccin Surface1 */
             padding: 4px 12px;
             border-radius: 16px;
             display: inline-block;
         }
 
         .guess-counter.warning {
-            color: #D97706;
-            background: #FEF3C7;
+            color: #fab387; /* Catppuccin Peach */
+            background: rgba(250, 179, 135, 0.2);
         }
 
         .guess-counter.danger {
-            color: #DC2626;
-            background: #FEE2E2;
+            color: #f38ba8; /* Catppuccin Pink */
+            background: rgba(243, 139, 168, 0.2);
         }
 
         .give-up-container {
@@ -298,8 +302,8 @@
         }
 
         .give-up-button {
-            background: #6B7280;
-            color: white;
+            background: #6c7086; /* Catppuccin Overlay0 */
+            color: #cdd6f4; /* Catppuccin Text */
             border: none;
             padding: 8px 16px;
             border-radius: 20px;
@@ -311,15 +315,15 @@
         }
 
         .give-up-button:hover:not(:disabled) {
-            background: #4B5563;
+            background: #585b70; /* Catppuccin Surface2 */
             opacity: 1;
             transform: translateY(-1px);
         }
 
         .give-up-button:disabled {
-            background: #9CA3AF;
+            background: #6c7086; /* Catppuccin Overlay0 */
             cursor: not-allowed;
-            opacity: 0.5;
+            opacity: 0.3;
         }
 
         .guess-input-container {
@@ -332,23 +336,29 @@
             padding: 0 60px 0 20px;
             font-size: 18px;
             font-weight: 500;
-            border: 3px solid #E5E7EB;
+            border: 3px solid #585b70; /* Catppuccin Surface2 */
             border-radius: 12px;
             transition: all 0.3s ease;
-            background: #FAFBFC;
+            background: #45475a; /* Catppuccin Surface1 */
+            color: #cdd6f4; /* Catppuccin Text */
         }
 
         .guess-input:focus {
             outline: none;
-            border-color: #3B82F6;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            border-color: #89b4fa; /* Catppuccin Blue */
+            background: #585b70; /* Catppuccin Surface2 */
+            box-shadow: 0 0 0 4px rgba(137, 180, 250, 0.2);
             transform: translateY(-1px);
         }
 
+        .guess-input::placeholder {
+            color: #9399b2; /* Catppuccin Overlay1 */
+        }
+
         .guess-input:disabled {
-            background: #F3F4F6;
+            background: #45475a; /* Catppuccin Surface1 */
             cursor: not-allowed;
+            opacity: 0.5;
         }
 
         .submit-button {
@@ -356,8 +366,8 @@
             right: 6px;
             top: 50%;
             transform: translateY(-50%);
-            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-            color: white;
+            background: linear-gradient(135deg, #89b4fa 0%, #74c7ec 100%); /* Catppuccin Blue to Sky */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
             border: none;
             width: 44px;
             height: 44px;
@@ -368,18 +378,19 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 2px 8px rgba(137, 180, 250, 0.3);
         }
 
         .submit-button:hover:not(:disabled) {
-            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            background: linear-gradient(135deg, #74c7ec 0%, #89dceb 100%); /* Catppuccin Sky to Sapphire */
             transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 12px rgba(116, 199, 236, 0.4);
         }
 
         .submit-button:disabled {
-            background: #9CA3AF;
+            background: #6c7086; /* Catppuccin Overlay0 */
             cursor: not-allowed;
+            opacity: 0.5;
         }
 
         .autocomplete-dropdown {
@@ -387,10 +398,10 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: white;
-            border: 1px solid #E5E5E5;
+            background: #45475a; /* Catppuccin Surface1 */
+            border: 1px solid #585b70; /* Catppuccin Surface2 */
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
             max-height: 200px;
             overflow-y: auto;
             z-index: 100;
@@ -405,12 +416,13 @@
         .autocomplete-item {
             padding: 12px 16px;
             cursor: pointer;
-            border-bottom: 1px solid #F3F4F6;
+            border-bottom: 1px solid #585b70; /* Catppuccin Surface2 */
+            color: #cdd6f4; /* Catppuccin Text */
         }
 
         .autocomplete-item:hover,
         .autocomplete-item.selected {
-            background: #F3F4F6;
+            background: #585b70; /* Catppuccin Surface2 */
         }
 
         .autocomplete-item:last-child {
@@ -418,15 +430,7 @@
         }
 
         .guesses-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 24px;
-            padding: 16px;
-            background: #F8FAFC;
-            border-radius: 12px;
-            border: 1px solid #E2E8F0;
-            position: relative;
+            display: none !important;
         }
 
         .guesses-grid::before {
@@ -458,10 +462,10 @@
         }
 
         .guess-slot.correct {
-            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-            color: white;
-            border: 2px solid #16A34A;
-            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+            background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%); /* Catppuccin Green to Teal */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
+            border: 2px solid #a6e3a1; /* Catppuccin Green */
+            box-shadow: 0 2px 8px rgba(166, 227, 161, 0.4);
             transform: scale(1.02);
         }
 
@@ -482,7 +486,7 @@
             margin-bottom: 20px;
             position: relative;
             z-index: 1000;
-            border: 3px solid #22C55E;
+            border: 3px solid #a6e3a1; /* Catppuccin Green */
         }
 
         .game-end.show {
@@ -497,7 +501,7 @@
         }
 
         .result-message.win {
-            color: #22C55E;
+            color: #a6e3a1; /* Catppuccin Green */
         }
 
         .result-message.lose {
@@ -512,10 +516,11 @@
 
         .business-details {
             text-align: left;
-            background: #F3F4F6;
+            background: #45475a; /* Catppuccin Surface1 */
             padding: 16px;
             border-radius: 8px;
             margin: 16px 0;
+            border: 1px solid #585b70; /* Catppuccin Surface2 */
         }
 
         .business-details p {
@@ -524,48 +529,69 @@
         }
 
         .business-details strong {
-            color: #3B82F6;
+            color: #89b4fa; /* Catppuccin Blue */
+        }
+
+        .business-details a {
+            color: #74c7ec; /* Catppuccin Sky */
+            text-decoration: none;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+            font-weight: 500;
+            padding: 2px 6px;
+            background: rgba(116, 199, 236, 0.1);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .business-details a:hover {
+            color: #89dceb; /* Catppuccin Sapphire */
+            background: rgba(116, 199, 236, 0.2);
+            transform: translateY(-1px);
         }
 
         .share-button {
-            background: #3B82F6;
-            color: white;
+            background: linear-gradient(135deg, #89b4fa 0%, #74c7ec 100%); /* Catppuccin Blue to Sky */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
             border: none;
             padding: 12px 24px;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
             margin-top: 16px;
         }
 
         .share-button:hover {
-            background: #2563EB;
+            background: linear-gradient(135deg, #74c7ec 0%, #89dceb 100%); /* Catppuccin Sky to Sapphire */
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(116, 199, 236, 0.3);
         }
 
         .share-button.copied {
-            background: #22C55E;
+            background: #a6e3a1; /* Catppuccin Green */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
         }
 
         .countdown {
             margin-top: 20px;
             padding: 16px;
-            background: #F3F4F6;
+            background: #45475a; /* Catppuccin Surface1 */
             border-radius: 8px;
             text-align: center;
+            border: 1px solid #585b70; /* Catppuccin Surface2 */
         }
 
         .countdown-label {
             font-size: 14px;
-            color: #666;
+            color: #a6adc8; /* Catppuccin Subtext1 */
             margin-bottom: 8px;
         }
 
         .countdown-time {
             font-size: 24px;
             font-weight: 700;
-            color: #3B82F6;
+            color: #89b4fa; /* Catppuccin Blue */
         }
 
         .modal {
@@ -575,7 +601,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(30, 30, 46, 0.8); /* Catppuccin Base with transparency */
             z-index: 1000;
             padding: 20px;
         }
@@ -587,13 +613,15 @@
         }
 
         .modal-content {
-            background: white;
+            background: #313244; /* Catppuccin Surface0 */
             border-radius: 12px;
             padding: 24px;
             max-width: 400px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
+            border: 1px solid #585b70; /* Catppuccin Surface2 */
+            color: #cdd6f4; /* Catppuccin Text */
         }
 
         .modal-header {
@@ -640,12 +668,12 @@
         .stat-value {
             font-size: 32px;
             font-weight: 700;
-            color: #3B82F6;
+            color: #89b4fa; /* Catppuccin Blue */
         }
 
         .stat-label {
             font-size: 12px;
-            color: #666;
+            color: #a6adc8; /* Catppuccin Subtext1 */
             margin-top: 4px;
         }
 
@@ -656,7 +684,7 @@
         }
 
         .debug-section {
-            border-bottom: 1px solid #E5E7EB;
+            border-bottom: 1px solid #585b70; /* Catppuccin Surface2 */
             padding-bottom: 16px;
         }
 
@@ -669,18 +697,26 @@
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 12px;
-            color: #374151;
+            color: #cdd6f4; /* Catppuccin Text */
         }
 
         .debug-section p {
             font-size: 14px;
             margin-bottom: 8px;
-            color: #6B7280;
+            color: #a6adc8; /* Catppuccin Subtext1 */
+        }
+
+        .debug-section strong {
+            color: #89b4fa; /* Catppuccin Blue */
+        }
+
+        .debug-section span {
+            color: #cdd6f4; /* Catppuccin Text */
         }
 
         .debug-btn {
-            background: #6B7280;
-            color: white;
+            background: #6c7086; /* Catppuccin Overlay0 */
+            color: #cdd6f4; /* Catppuccin Text */
             border: none;
             padding: 8px 16px;
             border-radius: 6px;
@@ -919,12 +955,7 @@
         }
 
         .map-label {
-            background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
-            padding: 12px 16px;
-            text-align: center;
-            font-weight: 600;
-            color: #374151;
-            font-size: 14px;
+            display: none;
         }
 
         /* Multiple Choice Styles */
@@ -965,9 +996,9 @@
         }
 
         .choice-button.correct {
-            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-            border-color: #16A34A;
-            color: white;
+            background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%); /* Catppuccin Green to Teal */
+            border-color: #a6e3a1; /* Catppuccin Green */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
         }
 
         .choice-button.wrong {
@@ -995,12 +1026,12 @@
             position: fixed;
             top: 80px;
             right: 20px;
-            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-            color: white;
+            background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%); /* Catppuccin Green to Teal */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
             padding: 16px 20px;
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
-            border: 2px solid #16A34A;
+            box-shadow: 0 8px 24px rgba(166, 227, 161, 0.4);
+            border: 2px solid #a6e3a1; /* Catppuccin Green */"
             z-index: 2000;
             max-width: 300px;
             opacity: 0;
@@ -1045,7 +1076,7 @@
         
         /* Achievement Showcase Styles */
         .achievement-showcase {
-            border-top: 1px solid #E5E7EB;
+            border-top: 1px solid #585b70; /* Catppuccin Surface2 */
             padding-top: 20px;
             margin-top: 16px;
         }
@@ -1054,7 +1085,7 @@
             font-size: 18px;
             font-weight: 700;
             margin-bottom: 16px;
-            color: #374151;
+            color: #cdd6f4; /* Catppuccin Text */
             text-align: center;
         }
         
@@ -1065,8 +1096,8 @@
         }
         
         .achievement-badge {
-            background: #F3F4F6;
-            border: 2px solid #E5E7EB;
+            background: #45475a; /* Catppuccin Surface1 */
+            border: 2px solid #585b70; /* Catppuccin Surface2 */
             border-radius: 12px;
             padding: 16px 8px;
             text-align: center;
@@ -1076,9 +1107,9 @@
         }
         
         .achievement-badge.unlocked {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border-color: #F59E0B;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+            background: linear-gradient(135deg, #f9e2af 0%, #f2d5cf 100%); /* Catppuccin Yellow to Rosewater */
+            border-color: #f9e2af; /* Catppuccin Yellow */
+            box-shadow: 0 2px 8px rgba(249, 226, 175, 0.3);
             transform: scale(1.02);
         }
         
@@ -1100,12 +1131,12 @@
         .achievement-badge-name {
             font-size: 12px;
             font-weight: 600;
-            color: #374151;
+            color: #a6adc8; /* Catppuccin Subtext1 */
             line-height: 1.3;
         }
         
         .achievement-badge.unlocked .achievement-badge-name {
-            color: #92400E;
+            color: #1e1e2e; /* Catppuccin Base for contrast on yellow background */
         }
         
         /* Visit Tracking Styles */
@@ -1119,8 +1150,8 @@
         }
         
         .visit-button {
-            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-            color: white;
+            background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%); /* Catppuccin Green to Teal */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
             border: none;
             padding: 12px 16px;
             border-radius: 8px;
@@ -1132,9 +1163,9 @@
         }
         
         .visit-button:hover {
-            background: linear-gradient(135deg, #16A34A 0%, #15803D 100%);
+            background: linear-gradient(135deg, #94e2d5 0%, #a6e3a1 100%); /* Reverse gradient */
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+            box-shadow: 0 4px 12px rgba(166, 227, 161, 0.4);
         }
         
         .wishlist-button {
@@ -1158,8 +1189,8 @@
         
         .directions-button {
             display: block;
-            background: #F3F4F6;
-            color: #374151;
+            background: #45475a; /* Catppuccin Surface1 */
+            color: #cdd6f4; /* Catppuccin Text */
             text-decoration: none;
             padding: 10px 16px;
             border-radius: 8px;
@@ -1167,18 +1198,18 @@
             font-weight: 500;
             text-align: center;
             transition: all 0.3s ease;
-            border: 2px solid #E5E7EB;
+            border: 2px solid #585b70; /* Catppuccin Surface2 */
         }
         
         .directions-button:hover {
-            background: #E5E7EB;
+            background: #585b70; /* Catppuccin Surface2 */
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
         
         .visited-badge {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            color: #92400E;
+            background: linear-gradient(135deg, #f9e2af 0%, #f2d5cf 100%); /* Catppuccin Yellow to Rosewater */
+            color: #1e1e2e; /* Catppuccin Base for contrast */
             padding: 12px 16px;
             border-radius: 8px;
             font-size: 14px;
