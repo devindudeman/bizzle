@@ -37,6 +37,17 @@
             margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             border: 1px solid #E2E8F0;
+            transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+        }
+
+        header.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            margin-bottom: 0;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0;
         }
 
         h1 {
@@ -162,29 +173,29 @@
         .fun-fact {
             background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
             border: 1px solid #F59E0B;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            font-size: 15px;
-            line-height: 1.6;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
             box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
         }
 
         .clue-label {
             font-weight: 700;
             color: #92400E;
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 4px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .new-hints {
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .new-hints .hint {
-            margin-bottom: 16px;
+            margin-bottom: 8px;
         }
 
         .new-hints .hint:first-child {
@@ -196,13 +207,13 @@
         .hint {
             background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
             border: 2px solid #3B82F6;
-            padding: 18px;
-            border-radius: 12px;
-            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
             display: block;
             animation: slideInFromTop 0.5s ease-out;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+            font-size: 14px;
             font-weight: 500;
             opacity: 0;
             transform: translateY(-20px);
@@ -1943,10 +1954,16 @@
             const guessSection = document.getElementById('guessSection');
             const guessesGrid = document.getElementById('guessesGrid');
             const hintsContainer = document.getElementById('newHints');
+            const header = document.querySelector('header');
             
             if (!guessSection || !guessesGrid || !hintsContainer) {
                 console.error('Required elements not found during UI restore');
                 return;
+            }
+            
+            // Hide header if hints have been revealed (gameplay started)
+            if (gameState.hintsRevealed > 0 && header) {
+                header.classList.add('hidden');
             }
             
             // Handle different game phases
@@ -2028,6 +2045,14 @@
             
             // Add it to the TOP of the hints container (prepend)
             hintsContainer.prepend(hintElement);
+            
+            // Hide header when first hint is revealed (gameplay starts)
+            if (hintNumber === 1) {
+                const header = document.querySelector('header');
+                if (header) {
+                    header.classList.add('hidden');
+                }
+            }
             
             // Trigger animation after DOM insertion
             requestAnimationFrame(() => {
@@ -3814,6 +3839,12 @@
                 
                 domElements.loading.style.display = 'none';
                 domElements.gameContent.style.display = 'block';
+                
+                // Ensure header is visible for fresh games
+                const header = document.querySelector('header');
+                if (header && (!gameState.hintsRevealed || gameState.hintsRevealed === 0)) {
+                    header.classList.remove('hidden');
+                }
                 
                 initializeGame();
 
