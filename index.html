@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizzle - Daily SF Business Guessing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #FAFAFA;
+            color: #1A1A1A;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #E5E5E5;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #3B82F6;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .stats-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .game-number {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .photo-container {
+            width: 100%;
+            max-height: 300px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            background: #E5E5E5;
+            position: relative;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #666;
+        }
+
+        .fun-fact {
+            background: #F3F4F6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .fun-fact-label {
+            font-weight: 600;
+            color: #3B82F6;
+            margin-bottom: 8px;
+        }
+
+        .hints-section {
+            margin-bottom: 20px;
+        }
+
+        .hint {
+            background: #FEF3C7;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .hint.revealed {
+            display: block;
+        }
+
+        .hint-label {
+            font-weight: 600;
+            color: #92400E;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .guess-section {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .guess-input-container {
+            position: relative;
+        }
+
+        .guess-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 48px 0 16px;
+            font-size: 16px;
+            border: 2px solid #E5E5E5;
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .guess-input:focus {
+            outline: none;
+            border-color: #3B82F6;
+        }
+
+        .guess-input:disabled {
+            background: #F3F4F6;
+            cursor: not-allowed;
+        }
+
+        .submit-button {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3B82F6;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .submit-button:hover:not(:disabled) {
+            background: #2563EB;
+        }
+
+        .submit-button:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #E5E5E5;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .autocomplete-dropdown.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background: #F3F4F6;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .guesses-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .guess-slot {
+            height: 48px;
+            background: #E5E5E5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .guess-slot.correct {
+            background: #22C55E;
+            color: white;
+        }
+
+        .guess-slot.wrong {
+            background: #EF4444;
+            color: white;
+        }
+
+        .game-end {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .game-end.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .result-message {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .result-message.win {
+            color: #22C55E;
+        }
+
+        .result-message.lose {
+            color: #EF4444;
+        }
+
+        .business-name-reveal {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .business-details {
+            text-align: left;
+            background: #F3F4F6;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .business-details p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .business-details strong {
+            color: #3B82F6;
+        }
+
+        .share-button {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 16px;
+        }
+
+        .share-button:hover {
+            background: #2563EB;
+        }
+
+        .share-button.copied {
+            background: #22C55E;
+        }
+
+        .countdown {
+            margin-top: 20px;
+            padding: 16px;
+            background: #F3F4F6;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .countdown-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .countdown-time {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3B82F6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: #F3F4F6;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #3B82F6;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .error-message {
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .stats-button {
+                top: 16px;
+                right: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="stats-button" onclick="showStats()" aria-label="View Statistics">📊</button>
+            <h1>🏪 Bizzle</h1>
+            <p class="tagline">Guess the SF small business!</p>
+            <p class="game-number" id="gameNumber"></p>
+        </header>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="loading" id="loading">
+            <span>Loading today's business...</span>
+        </div>
+
+        <div id="gameContent" style="display: none;">
+            <div class="photo-container">
+                <img id="businessPhoto" alt="Business interior photo">
+            </div>
+
+            <div class="fun-fact">
+                <div class="fun-fact-label">Fun Fact</div>
+                <div id="funFact"></div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint" id="hint1">
+                    <div class="hint-label">Neighborhood</div>
+                    <div id="neighborhood"></div>
+                </div>
+                <div class="hint" id="hint2">
+                    <div class="hint-label">Signature Item</div>
+                    <div id="signature"></div>
+                </div>
+                <div class="hint" id="hint3">
+                    <div class="hint-label">Category</div>
+                    <div id="category"></div>
+                </div>
+                <div class="hint" id="hint4">
+                    <div class="hint-label">Street</div>
+                    <div id="street"></div>
+                </div>
+            </div>
+
+            <div class="guess-section">
+                <div class="guess-input-container">
+                    <input type="text" 
+                           id="guessInput" 
+                           class="guess-input" 
+                           placeholder="Enter your guess..."
+                           autocomplete="off">
+                    <button id="submitButton" class="submit-button" onclick="submitGuess()">→</button>
+                    <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+                </div>
+            </div>
+
+            <div class="guesses-grid" id="guessesGrid">
+                <div class="guess-slot"></div>
+                <div class="guess-slot"></div>
+                <div class="guess-slot"></div>
+                <div class="guess-slot"></div>
+                <div class="guess-slot"></div>
+            </div>
+
+            <div class="game-end" id="gameEnd">
+                <div class="result-message" id="resultMessage"></div>
+                <div class="business-name-reveal" id="businessNameReveal"></div>
+                <div class="business-details" id="businessDetails"></div>
+                <button class="share-button" id="shareButton" onclick="shareResult()">Share Result</button>
+                <div class="countdown">
+                    <div class="countdown-label">Next Bizzle in</div>
+                    <div class="countdown-time" id="countdownTime"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="statsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Statistics</h2>
+                <button class="close-button" onclick="closeStats()">×</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="gamesPlayed">0</div>
+                    <div class="stat-label">Games Played</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="winPercentage">0%</div>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="currentStreak">0</div>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="maxStreak">0</div>
+                    <div class="stat-label">Max Streak</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_ID = '1aCuaC2pMPs7cnaBc9-reGxq8SKJIpIaCRd6rhUtTJgg';
+        const API_KEY = 'AIzaSyAkcxjO6ptmguM6UnYEu2CkdI2cIcsr5Ww';
+        const RANGE = 'Sheet1!A:J';
+
+        let currentBusiness = null;
+        let allBusinesses = [];
+        let gameState = {
+            date: null,
+            guesses: [],
+            hintsRevealed: 0,
+            won: false,
+            lost: false
+        };
+        let selectedAutocompleteIndex = -1;
+
+        async function fetchBusinessData() {
+            try {
+                const cacheKey = 'businessCache';
+                const cacheDate = 'businessCacheDate';
+                const today = new Date().toDateString();
+                
+                const cachedDate = localStorage.getItem(cacheDate);
+                const cachedData = localStorage.getItem(cacheKey);
+                
+                if (cachedDate === today && cachedData) {
+                    return JSON.parse(cachedData);
+                }
+                
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data from Google Sheets');
+                }
+                
+                const data = await response.json();
+                const rows = data.values;
+                
+                if (!rows || rows.length < 2) {
+                    throw new Error('No data found in spreadsheet');
+                }
+                
+                const headers = rows[0];
+                const businesses = rows.slice(1).map(row => {
+                    const business = {};
+                    headers.forEach((header, index) => {
+                        business[header] = row[index] || '';
+                    });
+                    return business;
+                });
+                
+                localStorage.setItem(cacheKey, JSON.stringify(businesses));
+                localStorage.setItem(cacheDate, today);
+                
+                return businesses;
+            } catch (error) {
+                console.error('Error fetching business data:', error);
+                showError('Failed to load today\'s business. Please try refreshing the page.');
+                return [];
+            }
+        }
+
+        function getTodaysBusiness(businesses) {
+            const today = new Date().toISOString().split('T')[0];
+            
+            const scheduledBusiness = businesses.find(b => b.DateToFeature === today);
+            if (scheduledBusiness) {
+                return scheduledBusiness;
+            }
+            
+            const daysSinceEpoch = Math.floor((new Date() - new Date('2024-01-01')) / (1000 * 60 * 60 * 24));
+            const index = daysSinceEpoch % businesses.length;
+            return businesses[index];
+        }
+
+        function getDayNumber() {
+            const startDate = new Date('2024-01-01');
+            const today = new Date();
+            const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            return daysDiff + 1;
+        }
+
+        function fuzzyMatch(guess, answer) {
+            const cleanString = (str) => {
+                return str.toLowerCase()
+                    .replace(/^(the|a|an)\s+/i, '')
+                    .replace(/\s*(san francisco|sf)\s*/gi, '')
+                    .replace(/[^a-z0-9]/g, '');
+            };
+            
+            const cleanGuess = cleanString(guess);
+            const cleanAnswer = cleanString(answer);
+            
+            if (cleanGuess === cleanAnswer) return true;
+            
+            const longer = cleanGuess.length > cleanAnswer.length ? cleanGuess : cleanAnswer;
+            const shorter = cleanGuess.length > cleanAnswer.length ? cleanAnswer : cleanGuess;
+            
+            let matches = 0;
+            for (let i = 0; i < shorter.length; i++) {
+                if (shorter[i] === longer[i]) matches++;
+            }
+            
+            return matches / longer.length >= 0.8;
+        }
+
+        function initializeGame() {
+            const today = new Date().toDateString();
+            const savedState = localStorage.getItem('gameState');
+            const lastPlayed = localStorage.getItem('lastPlayed');
+            
+            if (savedState && lastPlayed === today) {
+                gameState = JSON.parse(savedState);
+                restoreGameUI();
+            } else {
+                gameState = {
+                    date: today,
+                    guesses: [],
+                    hintsRevealed: 0,
+                    won: false,
+                    lost: false
+                };
+                saveGameState();
+            }
+            
+            document.getElementById('gameNumber').textContent = `Bizzle #${getDayNumber()}`;
+        }
+
+        function saveGameState() {
+            localStorage.setItem('gameState', JSON.stringify(gameState));
+            localStorage.setItem('lastPlayed', new Date().toDateString());
+        }
+
+        function restoreGameUI() {
+            const guessSlots = document.querySelectorAll('.guess-slot');
+            gameState.guesses.forEach((guess, index) => {
+                if (guessSlots[index]) {
+                    guessSlots[index].textContent = guess.text;
+                    guessSlots[index].classList.add(guess.correct ? 'correct' : 'wrong');
+                }
+            });
+            
+            for (let i = 0; i < gameState.hintsRevealed; i++) {
+                revealHint(i + 1);
+            }
+            
+            if (gameState.won || gameState.lost) {
+                endGame(gameState.won);
+            }
+        }
+
+        function revealHint(hintNumber) {
+            const hint = document.getElementById(`hint${hintNumber}`);
+            if (hint) {
+                hint.classList.add('revealed');
+            }
+        }
+
+        function submitGuess() {
+            const input = document.getElementById('guessInput');
+            const guess = input.value.trim();
+            
+            if (!guess || gameState.won || gameState.lost) return;
+            
+            const isCorrect = fuzzyMatch(guess, currentBusiness.Name);
+            
+            gameState.guesses.push({
+                text: guess,
+                correct: isCorrect
+            });
+            
+            const guessSlots = document.querySelectorAll('.guess-slot');
+            const currentSlot = guessSlots[gameState.guesses.length - 1];
+            if (currentSlot) {
+                currentSlot.textContent = guess;
+                currentSlot.classList.add(isCorrect ? 'correct' : 'wrong');
+            }
+            
+            if (isCorrect) {
+                gameState.won = true;
+                endGame(true);
+            } else if (gameState.guesses.length >= 5) {
+                gameState.lost = true;
+                endGame(false);
+            } else {
+                gameState.hintsRevealed = gameState.guesses.length;
+                revealHint(gameState.hintsRevealed);
+            }
+            
+            saveGameState();
+            input.value = '';
+            closeAutocomplete();
+        }
+
+        function endGame(won) {
+            const input = document.getElementById('guessInput');
+            const submitButton = document.getElementById('submitButton');
+            input.disabled = true;
+            submitButton.disabled = true;
+            
+            const gameEnd = document.getElementById('gameEnd');
+            const resultMessage = document.getElementById('resultMessage');
+            const businessNameReveal = document.getElementById('businessNameReveal');
+            const businessDetails = document.getElementById('businessDetails');
+            
+            gameEnd.classList.add('show');
+            
+            if (won) {
+                resultMessage.textContent = `Amazing! Got it in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}!`;
+                resultMessage.classList.add('win');
+            } else {
+                resultMessage.textContent = 'Better luck tomorrow!';
+                resultMessage.classList.add('lose');
+            }
+            
+            businessNameReveal.textContent = currentBusiness.Name;
+            
+            businessDetails.innerHTML = `
+                <p><strong>Address:</strong> ${currentBusiness.Address}</p>
+                <p><strong>Neighborhood:</strong> ${currentBusiness.Neighborhood}</p>
+                <p><strong>Category:</strong> ${currentBusiness.Category}</p>
+                <p><strong>Signature:</strong> ${currentBusiness.Signature}</p>
+                ${currentBusiness.Website ? `<p><strong>Website:</strong> <a href="${currentBusiness.Website}" target="_blank">${currentBusiness.Website}</a></p>` : ''}
+            `;
+            
+            updateStatistics(won);
+            startCountdown();
+        }
+
+        function generateShareText() {
+            const dayNumber = getDayNumber();
+            const guessCount = gameState.won ? gameState.guesses.length : 'X';
+            let emojiGrid = '';
+            
+            for (let i = 0; i < 5; i++) {
+                if (i < gameState.guesses.length) {
+                    emojiGrid += gameState.guesses[i].correct ? '🟩' : '🟥';
+                } else {
+                    emojiGrid += '⬜';
+                }
+            }
+            
+            const url = window.location.href.split('?')[0];
+            return `Bizzle #${dayNumber} ${guessCount}/5\n${emojiGrid}\n\nPlay at ${url}`;
+        }
+
+        function shareResult() {
+            const shareText = generateShareText();
+            const shareButton = document.getElementById('shareButton');
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    shareButton.textContent = 'Copied!';
+                    shareButton.classList.add('copied');
+                    setTimeout(() => {
+                        shareButton.textContent = 'Share Result';
+                        shareButton.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {
+                    fallbackCopy(shareText);
+                });
+            } else {
+                fallbackCopy(shareText);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            const shareButton = document.getElementById('shareButton');
+            shareButton.textContent = 'Copied!';
+            shareButton.classList.add('copied');
+            setTimeout(() => {
+                shareButton.textContent = 'Share Result';
+                shareButton.classList.remove('copied');
+            }, 2000);
+        }
+
+        function updateStatistics(won) {
+            let stats = localStorage.getItem('statistics');
+            if (!stats) {
+                stats = {
+                    gamesPlayed: 0,
+                    gamesWon: 0,
+                    currentStreak: 0,
+                    maxStreak: 0
+                };
+            } else {
+                stats = JSON.parse(stats);
+            }
+            
+            stats.gamesPlayed++;
+            if (won) {
+                stats.gamesWon++;
+                stats.currentStreak++;
+                if (stats.currentStreak > stats.maxStreak) {
+                    stats.maxStreak = stats.currentStreak;
+                }
+            } else {
+                stats.currentStreak = 0;
+            }
+            
+            localStorage.setItem('statistics', JSON.stringify(stats));
+        }
+
+        function displayStatistics() {
+            let stats = localStorage.getItem('statistics');
+            if (!stats) {
+                stats = {
+                    gamesPlayed: 0,
+                    gamesWon: 0,
+                    currentStreak: 0,
+                    maxStreak: 0
+                };
+            } else {
+                stats = JSON.parse(stats);
+            }
+            
+            document.getElementById('gamesPlayed').textContent = stats.gamesPlayed;
+            document.getElementById('winPercentage').textContent = 
+                stats.gamesPlayed > 0 
+                    ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) + '%'
+                    : '0%';
+            document.getElementById('currentStreak').textContent = stats.currentStreak;
+            document.getElementById('maxStreak').textContent = stats.maxStreak;
+        }
+
+        function showStats() {
+            displayStatistics();
+            document.getElementById('statsModal').classList.add('show');
+        }
+
+        function closeStats() {
+            document.getElementById('statsModal').classList.remove('show');
+        }
+
+        function startCountdown() {
+            function updateCountdown() {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0);
+                
+                const diff = tomorrow - now;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('countdownTime').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        function setupAutocomplete() {
+            const input = document.getElementById('guessInput');
+            const dropdown = document.getElementById('autocompleteDropdown');
+            
+            input.addEventListener('input', (e) => {
+                const value = e.target.value.toLowerCase().trim();
+                if (value.length < 2) {
+                    closeAutocomplete();
+                    return;
+                }
+                
+                const matches = allBusinesses.filter(business => 
+                    business.Name.toLowerCase().includes(value)
+                ).slice(0, 5);
+                
+                if (matches.length === 0) {
+                    closeAutocomplete();
+                    return;
+                }
+                
+                dropdown.innerHTML = '';
+                selectedAutocompleteIndex = -1;
+                
+                matches.forEach((business, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    item.textContent = business.Name;
+                    item.addEventListener('click', () => {
+                        input.value = business.Name;
+                        closeAutocomplete();
+                        submitGuess();
+                    });
+                    dropdown.appendChild(item);
+                });
+                
+                dropdown.classList.add('active');
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                const items = dropdown.querySelectorAll('.autocomplete-item');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, items.length - 1);
+                    updateAutocompleteSelection(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, -1);
+                    updateAutocompleteSelection(items);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (selectedAutocompleteIndex >= 0 && items[selectedAutocompleteIndex]) {
+                        input.value = items[selectedAutocompleteIndex].textContent;
+                        closeAutocomplete();
+                    }
+                    submitGuess();
+                } else if (e.key === 'Escape') {
+                    closeAutocomplete();
+                }
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    closeAutocomplete();
+                }
+            });
+        }
+
+        function updateAutocompleteSelection(items) {
+            items.forEach((item, index) => {
+                if (index === selectedAutocompleteIndex) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        function closeAutocomplete() {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            dropdown.classList.remove('active');
+            selectedAutocompleteIndex = -1;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        async function init() {
+            try {
+                allBusinesses = await fetchBusinessData();
+                
+                if (allBusinesses.length === 0) {
+                    throw new Error('No businesses available');
+                }
+                
+                currentBusiness = getTodaysBusiness(allBusinesses);
+                
+                if (!currentBusiness) {
+                    throw new Error('Could not load today\'s business');
+                }
+                
+                document.getElementById('businessPhoto').src = currentBusiness.PhotoURL;
+                document.getElementById('funFact').textContent = currentBusiness.FunFact;
+                document.getElementById('neighborhood').textContent = currentBusiness.Neighborhood;
+                document.getElementById('signature').textContent = currentBusiness.Signature;
+                document.getElementById('category').textContent = currentBusiness.Category;
+                document.getElementById('street').textContent = currentBusiness.Street;
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('gameContent').style.display = 'block';
+                
+                initializeGame();
+                setupAutocomplete();
+                
+                document.getElementById('guessInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && selectedAutocompleteIndex === -1) {
+                        e.preventDefault();
+                        submitGuess();
+                    }
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        const statsModal = document.getElementById('statsModal');
+                        if (statsModal.classList.contains('show')) {
+                            closeStats();
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                document.getElementById('loading').style.display = 'none';
+                showError('Failed to initialize game. Please refresh the page.');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
