@@ -576,7 +576,8 @@
             guesses: [],
             hintsRevealed: 0,
             won: false,
-            lost: false
+            lost: false,
+            statsUpdated: false // Track if stats were already updated for this game
         };
         let selectedAutocompleteIndex = -1;
 
@@ -635,16 +636,16 @@
                 return scheduledBusiness;
             }
             
-            const daysSinceEpoch = Math.floor((new Date() - new Date('2024-01-01')) / (1000 * 60 * 60 * 24));
+            const daysSinceEpoch = Math.floor((new Date() - new Date('2025-08-10')) / (1000 * 60 * 60 * 24));
             const index = daysSinceEpoch % businesses.length;
             return businesses[index];
         }
 
         function getDayNumber() {
-            const startDate = new Date('2024-01-01');
+            const startDate = new Date('2025-08-10'); // Game launch date
             const today = new Date();
             const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-            return daysDiff + 1;
+            return Math.max(1, daysDiff + 1); // Ensure it's at least 1
         }
 
         function fuzzyMatch(guess, answer) {
@@ -685,7 +686,8 @@
                     guesses: [],
                     hintsRevealed: 0,
                     won: false,
-                    lost: false
+                    lost: false,
+                    statsUpdated: false
                 };
                 saveGameState();
             }
@@ -790,7 +792,12 @@
                 ${currentBusiness.Website ? `<p><strong>Website:</strong> <a href="${currentBusiness.Website}" target="_blank">${currentBusiness.Website}</a></p>` : ''}
             `;
             
-            updateStatistics(won);
+            // Only update statistics once per game
+            if (!gameState.statsUpdated) {
+                updateStatistics(won);
+                gameState.statsUpdated = true;
+                saveGameState();
+            }
             startCountdown();
         }
 

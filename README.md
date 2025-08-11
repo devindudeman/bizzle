@@ -10,7 +10,42 @@ A fun daily guessing game where players identify San Francisco small businesses 
 4. Get a new hint after each wrong guess
 5. Share your results with friends!
 
-## 🚀 Quick Setup Guide
+## 🏃‍♂️ Running Locally (Quick Start)
+
+Want to play or test the game on your computer? It's super easy!
+
+### Option 1: Direct Browser Opening (Simplest)
+1. Download or clone this repository
+2. Double-click the `index.html` file
+3. The game opens in your default browser!
+
+### Option 2: Using a Local Server (Recommended)
+Running a local server prevents any potential CORS issues:
+
+**With Python (Mac/Linux usually have this):**
+```bash
+# Navigate to the game folder, then:
+python3 -m http.server 8000
+# Visit http://localhost:8000 in your browser
+```
+
+**With Node.js:**
+```bash
+# If you have Node.js installed:
+npx http-server -p 8000
+# Visit http://localhost:8000 in your browser
+```
+
+**With PHP:**
+```bash
+# If you have PHP installed:
+php -S localhost:8000
+# Visit http://localhost:8000 in your browser
+```
+
+**Note:** You'll need an internet connection to fetch business data from Google Sheets and load images from Google Drive.
+
+## 🚀 Deploying Online (GitHub Pages)
 
 ### Prerequisites
 - A GitHub account (free at github.com)
