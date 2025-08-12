@@ -460,52 +460,6 @@
             border-bottom: none;
         }
 
-        .guesses-grid {
-            display: none !important;
-        }
-
-        .guesses-grid::before {
-            content: "Your Guesses";
-            position: absolute;
-            top: -12px;
-            left: 16px;
-            background: #F8FAFC;
-            padding: 0 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748B;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .guess-slot {
-            height: 52px;
-            background: white;
-            border: 2px dashed #CBD5E1;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            color: #64748B;
-        }
-
-        .guess-slot.correct {
-            background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%); /* Catppuccin Green to Teal */
-            color: #1e1e2e; /* Catppuccin Base for contrast */
-            border: 2px solid #a6e3a1; /* Catppuccin Green */
-            box-shadow: 0 2px 8px rgba(166, 227, 161, 0.4);
-            transform: scale(1.02);
-        }
-
-        .guess-slot.wrong {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            color: white;
-            border: 2px solid #DC2626;
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-        }
 
         .game-end {
             display: none;
@@ -1002,7 +956,7 @@
 
         .choice-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
         }
 
@@ -1299,14 +1253,6 @@
                 margin-bottom: 20px;
             }
 
-            .guesses-grid {
-                padding: 12px;
-            }
-
-            .guess-slot {
-                height: 48px;
-                font-size: 15px;
-            }
 
             .give-up-button {
                 font-size: 11px;
@@ -1429,10 +1375,6 @@
                 <div id="funFact"></div>
             </div>
 
-            <!-- Previous Guesses Display (shown at bottom after game ends) -->
-            <div class="guesses-grid" id="guessesGrid" style="display: none;">
-                <!-- Guess slots will be added dynamically -->
-            </div>
         </div>
     </div>
 
@@ -1547,21 +1489,6 @@
                     <div class="step-content">
                         <h3>🗺️ Use the Map</h3>
                         <p>After your first wrong guess, an interactive map appears with multiple choice options. Each wrong answer reveals more hints and zooms closer!</p>
-                    </div>
-                </div>
-                <div class="tutorial-step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>🎯 Earn Points</h3>
-                        <p><strong>5 pts</strong> first guess • <strong>4 pts</strong> second guess • <strong>3 pts</strong> third guess • <strong>2 pts</strong> fourth guess • <strong>1 pt</strong> fifth guess</p>
-                        <p>Get <strong>+2 bonus points</strong> when you mark a place as visited!</p>
-                    </div>
-                </div>
-                <div class="tutorial-step">
-                    <div class="step-number">5</div>
-                    <div class="step-content">
-                        <h3>🏆 Unlock Achievements</h3>
-                        <p>Build streaks, score perfectly, discover new places, and visit businesses in real life to earn achievement badges!</p>
                     </div>
                 </div>
                 <button class="tutorial-start-btn" onclick="closeTutorial()">Start Playing! 🚀</button>
@@ -1772,8 +1699,6 @@
                 shareButton: document.getElementById('shareButton'),
                 countdownTime: document.getElementById('countdownTime'),
                 
-                // Guesses grid
-                guessesGrid: document.getElementById('guessesGrid'),
                 
                 // Modals
                 statsModal: document.getElementById('statsModal'),
@@ -2045,11 +1970,10 @@
         function restoreGameUI() {
             // Safety checks for required elements
             const guessSection = document.getElementById('guessSection');
-            const guessesGrid = document.getElementById('guessesGrid');
             const hintsContainer = document.getElementById('newHints');
             const header = document.querySelector('header');
             
-            if (!guessSection || !guessesGrid || !hintsContainer) {
+            if (!guessSection || !hintsContainer) {
                 console.error('Required elements not found during UI restore');
                 return;
             }
@@ -2070,7 +1994,6 @@
                     showMap();
                     showFinalLocation(); // Show exact location with marker
                 }
-                guessesGrid.style.display = 'block';
                 endGame(gameState.won);
             } else if (gameState.phase === 'multiple-choice') {
                 // In multiple choice phase
@@ -2092,10 +2015,6 @@
                 hideMultipleChoice();
             }
             
-            // Recreate guess slots for existing guesses
-            gameState.guesses.forEach((guess, index) => {
-                addGuessSlot(guess.text, guess.correct);
-            });
             
             // Clear any existing hints and recreate them in reverse order (newest first)
             hintsContainer.innerHTML = '';
@@ -2155,21 +2074,6 @@
             });
         }
 
-        function addGuessSlot(guessText, isCorrect) {
-            const guessesGrid = document.getElementById('guessesGrid');
-            const guessSlot = document.createElement('div');
-            guessSlot.className = 'guess-slot';
-            guessSlot.textContent = guessText;
-            
-            if (isCorrect) {
-                guessSlot.classList.add('correct');
-            } else {
-                guessSlot.classList.add('wrong');
-            }
-            
-            guessesGrid.appendChild(guessSlot);
-            // Don't show during gameplay - only at the end
-        }
 
         function updateGuessCounter() {
             const counter = domElements.guessCounter;
@@ -2268,7 +2172,6 @@
                 correct: isCorrect
             });
             
-            addGuessSlot(guess, isCorrect);
             updateGuessCounter();
             
             if (isCorrect) {
@@ -2413,10 +2316,6 @@
                 domElements.newHints.style.display = 'none';
             }
             
-            // Show the guess history now that game is over
-            if (gameState.guesses.length > 0) {
-                domElements.guessesGrid.style.display = 'block';
-            }
             
             const gameEnd = domElements.gameEnd;
             const resultMessage = domElements.resultMessage;
@@ -2520,19 +2419,8 @@
             
             shareText += `\n${emojiGrid}`;
             
-            // Add achievement unlock if any new achievements were unlocked today
-            if (gameState.won && achievements.unlocked.length > 0) {
-                const recentAchievement = achievements.unlocked[achievements.unlocked.length - 1];
-                const achievement = CONFIG.ACHIEVEMENTS[recentAchievement];
-                if (achievement && gameState.pointsEarned === 5 && recentAchievement === 'perfect') {
-                    shareText += `\n🏆 Achievement Unlocked: ${achievement.name}!`;
-                }
-            }
-            
-            shareText += `\n💯 Total: ${stats.totalPoints} pts | 🏆 ${achievements.unlocked.length} achievements`;
-            
             const url = window.location.href.split('?')[0];
-            shareText += `\n\nDiscover SF businesses at ${url}`;
+            shareText += `\nbizzle.fitzsky.com`;
             
             return shareText;
         }
